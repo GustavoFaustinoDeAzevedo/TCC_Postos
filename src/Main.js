@@ -2,8 +2,7 @@
 //Utilizei ids (keys) nos componentes do objeto porque na tabela do
 //ant design eles já tinham planejado com ids, então tive que refazer
 //algumas coisas para que as linhas pudessem ser editáveis
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MaskedInput from "antd-mask-input";
 import {
   Divider,
@@ -48,10 +47,11 @@ import "antd/dist/antd.css";
 import "./App.css";
 import Demo from "./components/Demo";
 import RegistrationForm from "./components/RegistrationForm";
-import { useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import Tabela from "./components/Tabela";
+import { TesteAPI } from "./actions/generalActions";
 
-function Main() {
+function Main(props) {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const { Header, Content, Footer, Sider } = Layout;
@@ -59,7 +59,7 @@ function Main() {
   const { SubMenu } = Menu;
   const { Step } = Steps;
   const { Option } = Select;
-  const { dataSource } = useSelector(state => state.general);
+  const { dataSource, post } = useSelector(state => state.general);
 
 
   const [dataSource2, setDataSource] = useState([
@@ -568,6 +568,10 @@ function Main() {
       </>
     );
   };
+
+    useEffect(() => {
+      props.dispatch(TesteAPI());
+    }, []);
   //////////////////0#MAIN//////////////////////
   return (
     <HashRouter>
@@ -640,6 +644,7 @@ function Main() {
               style={{ height: "100%", width: "100%" }}
             >
               <Home />
+              <div>{JSON.stringify(post) }</div>
               <Routes>
                 <Route path="/progresso" element={<Demo />} />
                 <Route path="/registrar" element={<RegistrationForm />} />
@@ -673,4 +678,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default connect()(Main);

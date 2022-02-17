@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const AddDataSource = function (data) {
   return function (dispatch) {
     dispatch({
@@ -19,6 +21,18 @@ export const DeleteDataSource = function (data) {
     dispatch({
       type: 'DELETE_DATA_SOURCE',
       payload: data,
+    });
+  };
+};
+export const TesteAPI = function () {
+  return function (dispatch) {
+    dispatch({
+      type: 'TESTE_API',
+      payload: axios.post('https://jsonplacehoifhuiywgfiuyrwgflder.typicode.com/posts', {
+        title: 'foo',
+        body: 'bar',
+        userId: 1,
+      }),
     });
   };
 };

@@ -1,5 +1,8 @@
+import { message } from 'antd';
+
 var initialState = {
   loading: false,
+  post: null,
   dataSource: [
     {
       key: '1',
@@ -45,7 +48,27 @@ const generalReducer = function (state = initialState, action) {
     case 'DELETE_DATA_SOURCE':
       state = {
         ...state,
-        dataSource: state.dataSource.filter(c=> c.key !== action.payload)
+        dataSource: state.dataSource.filter((c) => c.key !== action.payload),
+      };
+      break;
+    case 'TESTE_API_PENDING':
+      state = {
+        ...state,
+        loading: true,
+      };
+      break;
+    case 'TESTE_API_REJECTED':
+      state = {
+        ...state,
+        loading: false,
+      };
+      message.error(action.payload.message);
+      break;
+    case 'TESTE_API_FULFILLED':
+      state = {
+        ...state,
+        loading: false,
+        post: action.payload.data,
       };
       break;
     default:
