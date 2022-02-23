@@ -1,3 +1,7 @@
+//logar como:
+//gustavo@hotmail.com
+//123456
+//para acessar o add post
 import { connect } from "react-redux";
 import { List, Card, Button, Col } from "antd";
 import React, { useEffect, useState } from "react";

@@ -2,11 +2,13 @@ import { Button, Form, Input } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import React, { useEffect, useState } from "react";
 import { connect, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { AddUserPost } from "../actions/generalActions";
 
 function AddPost(props) {
   const [form] = Form.useForm();
   const { user, newPost, getPosts } = useSelector((state) => state.general);
+  let navigate = useNavigate();
   const onFinish = (values) => {
     values.key = user.key;
     console.log(values);
@@ -14,6 +16,7 @@ function AddPost(props) {
     console.log("Received values of form: ", values);
     localStorage.setItem("newposts", JSON.stringify(newPost));
     localStorage.setItem("posts", JSON.stringify([newPost, ...getPosts]));
+    navigate(`/posts`);
     //window.location.reload();
   };
   return (

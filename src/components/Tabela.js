@@ -1,3 +1,7 @@
+//logar como:
+//gustavo@hotmail.com
+//123456
+//para editar tabela
 import React, { useState } from "react";
 import { Table } from "antd";
 import { connect, useSelector } from "react-redux";

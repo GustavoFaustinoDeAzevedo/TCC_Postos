@@ -3,15 +3,16 @@ import { Form, Input, Checkbox, Button } from "antd";
 import MaskedInput from "antd-mask-input/build/main/lib/MaskedInput";
 import { connect, useSelector } from "react-redux";
 import { AddDataSource } from "../actions/generalActions";
-
+import { Link, useNavigate } from "react-router-dom";
 function RegistrationForm(props) {
   const [form] = Form.useForm();
   const { dataSource } = useSelector((state) => state.general);
-
+  let navigate = useNavigate();
   const onFinish = (values) => {
     values.key = "" + (parseInt(dataSource[dataSource.length - 1].key, 10) + 1);
     props.dispatch(AddDataSource(values));
     console.log("Received values of form: ", values);
+    navigate(`/login`);
   };
   return (
     <Form
