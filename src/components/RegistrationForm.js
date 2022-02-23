@@ -1,27 +1,26 @@
-
-import React, { useState } from 'react';
-import { Form, Input, Checkbox, Button } from 'antd';
-import MaskedInput
-  from 'antd-mask-input/build/main/lib/MaskedInput';
-import { connect, useSelector } from 'react-redux';
-import { AddDataSource } from '../actions/generalActions';
+import React from "react";
+import { Form, Input, Checkbox, Button } from "antd";
+import MaskedInput from "antd-mask-input/build/main/lib/MaskedInput";
+import { connect, useSelector } from "react-redux";
+import { AddDataSource } from "../actions/generalActions";
 
 function RegistrationForm(props) {
   const [form] = Form.useForm();
-  const { dataSource } = useSelector(state => state.general);
+  const { dataSource } = useSelector((state) => state.general);
 
   const onFinish = (values) => {
-    values.key = '' + (parseInt(dataSource[dataSource.length - 1].key, 10) + 1);
+    values.key = "" + (parseInt(dataSource[dataSource.length - 1].key, 10) + 1);
     props.dispatch(AddDataSource(values));
-    console.log('Received values of form: ', values);
+    console.log("Received values of form: ", values);
   };
   return (
     <Form
+      style={{ height: "65vh" }}
       form={form}
       name="register"
       onFinish={onFinish}
       initialValues={{
-        prefix: '84',
+        prefix: "84",
       }}
       scrollToFirstError
     >
@@ -31,7 +30,7 @@ function RegistrationForm(props) {
         rules={[
           {
             required: true,
-            message: 'Insira seu nome!',
+            message: "Insira seu nome!",
             whitespace: true,
           },
         ]}
@@ -43,12 +42,12 @@ function RegistrationForm(props) {
         label="E-mail"
         rules={[
           {
-            type: 'email',
-            message: 'E-mail! inválido',
+            type: "email",
+            message: "E-mail! inválido",
           },
           {
             required: true,
-            message: 'Insira um E-mail!',
+            message: "Insira um E-mail!",
           },
         ]}
       >
@@ -61,7 +60,7 @@ function RegistrationForm(props) {
         rules={[
           {
             required: true,
-            message: 'Insira sua senha!',
+            message: "Insira sua senha!",
           },
         ]}
         hasFeedback
@@ -72,20 +71,20 @@ function RegistrationForm(props) {
       <Form.Item
         name="confirmar"
         label="Confirmar Senha"
-        dependencies={['senha']}
+        dependencies={["senha"]}
         hasFeedback
         rules={[
           {
             required: true,
-            message: 'Confirme sua senha!',
+            message: "Confirme sua senha!",
           },
           ({ getFieldValue }) => ({
             validator(_, value) {
-              if (!value || getFieldValue('senha') === value) {
+              if (!value || getFieldValue("senha") === value) {
                 return Promise.resolve();
               }
 
-              return Promise.reject(new Error('Senhas inseridas não batem'));
+              return Promise.reject(new Error("Senhas inseridas não batem"));
             },
           }),
         ]}
@@ -98,7 +97,7 @@ function RegistrationForm(props) {
         rules={[
           {
             required: true,
-            message: 'Insira seu telefone!',
+            message: "Insira seu telefone!",
           },
         ]}
       >
@@ -106,7 +105,7 @@ function RegistrationForm(props) {
           mask="(11) 11111-1111"
           name="telefone"
           style={{
-            width: '100%',
+            width: "100%",
           }}
         />
       </Form.Item>
@@ -116,7 +115,11 @@ function RegistrationForm(props) {
         rules={[
           {
             validator: (_, value) =>
-              value ? Promise.resolve() : Promise.reject(new Error('Deve aceitar os termos e condições.')),
+              value
+                ? Promise.resolve()
+                : Promise.reject(
+                    new Error("Deve aceitar os termos e condições.")
+                  ),
           },
         ]}
       >
@@ -128,7 +131,6 @@ function RegistrationForm(props) {
       <Button type="primary" htmlType="submit">
         Registrar
       </Button>
-      {dataSource.map(c => <div key={c.key}>{c.nome }</div>)}
     </Form>
   );
 }
