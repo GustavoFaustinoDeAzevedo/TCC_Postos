@@ -23,18 +23,18 @@ import { GetPosts, LogIn, LogOut } from "./actions/generalActions";
 
 function Main(props) {
   const { Header, Content, Footer, Sider } = Layout;
-  const { SubMenu } = Menu;
 
   const { isAuthenticated, user, loading } = useSelector(
     (state) => state.general
   );
+  const styles = isAuthenticated ? "#002329" : "#002766";
+
   const ClickButton = () => {
     props.dispatch(LogOut());
   };
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("usuario"));
-    const posts = JSON.parse(localStorage.getItem("posts"));
-    const newpost = JSON.parse(localStorage.getItem("newpost"));
+
     console.log(data);
     localStorage.clear();
 
@@ -43,12 +43,8 @@ function Main(props) {
     } else {
       props.dispatch(LogOut());
     }
-    if (posts) {
-      props.dispatch(GetPosts(posts));
-    }
-    localStorage.setItem("posts", JSON.stringify(posts));
+
     localStorage.setItem("usuario", JSON.stringify(data));
-    localStorage.setItem("newpost", JSON.stringify(newpost));
   }, []);
 
   return (
@@ -56,6 +52,7 @@ function Main(props) {
       <Layout hasSider>
         <Sider
           style={{
+            background: styles,
             overflow: "auto",
             height: "200vh",
             position: "fixed",
@@ -65,7 +62,12 @@ function Main(props) {
           }}
         >
           <div className="logo" />
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={["4"]}>
+          <Menu
+            theme="dark"
+            style={{ background: styles }}
+            mode="inline"
+            defaultSelectedKeys={["4"]}
+          >
             <Menu.Item key="1" icon={<HomeOutlined />}>
               <Link to="/login">Home</Link>
             </Menu.Item>
@@ -91,6 +93,7 @@ function Main(props) {
           <Header
             style={{
               color: "rgba(255, 255, 255, 1)",
+              background: styles,
               position: "fixed",
               zIndex: 1,
               width: "100%",
@@ -108,6 +111,7 @@ function Main(props) {
           <Spin spinning={loading}>
             <Content
               style={{
+                styles,
                 padding: 80,
                 margin: "24px 16px 0",
                 overflow: "initial",

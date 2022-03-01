@@ -1,7 +1,6 @@
 import { Button, Input, Form, Checkbox } from "antd";
 import { Link } from "react-router-dom";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import "antd/dist/antd.css";
 
 import { connect, useSelector } from "react-redux";
 import { LogIn, LogOut } from "../actions/generalActions";

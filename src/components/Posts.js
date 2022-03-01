@@ -3,7 +3,7 @@
 //123456
 //para acessar o add post
 import { connect } from "react-redux";
-import { List, Card, Button, Col } from "antd";
+import { List, Card, Button, Col, Form } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { GetComments, GetPosts, PostComments } from "../actions/generalActions";
@@ -11,6 +11,8 @@ import Modal from "antd/lib/modal/Modal";
 import Comments from "./Comments";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import AddPost from "./AddPost";
+import { AddUserPost } from "../actions/generalActions";
+
 function Posts(props) {
   useEffect(() => {
     props.dispatch(GetPosts());
@@ -21,6 +23,15 @@ function Posts(props) {
   const { getPosts, loading, getComments, user } = useSelector(
     (state) => state.general
   );
+
+  const [form] = Form.useForm();
+  const onFinish = (values) => {
+    values.key = user.key;
+    console.log(values);
+    props.dispatch(AddUserPost(values));
+    console.log("Received values of form: ", values);
+    //window.location.reload();
+  };
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModal2Visible, setIsModal2Visible] = useState(false);
@@ -47,10 +58,7 @@ function Posts(props) {
   const handleCancel2 = () => {
     setIsModal2Visible(false);
   };
-  let posts = getPosts;
-  if (JSON.parse(localStorage.getItem("posts"))) {
-    posts = JSON.parse(localStorage.getItem("posts"));
-  }
+
   return (
     <div>
       <List
@@ -64,7 +72,7 @@ function Posts(props) {
           },
           responsive: true,
         }}
-        dataSource={posts}
+        dataSource={getPosts}
         footer={
           user.dba && (
             <div>
@@ -77,9 +85,18 @@ function Posts(props) {
                 visible={isModal2Visible}
                 onOk={handleOk2}
                 onCancel={handleCancel2}
+                footer={[]}
                 width={1000}
               >
-                <AddPost />
+                <AddPost form={form} onFinish={onFinish} />
+                <Button
+                  type="primary"
+                  onClick={() => form.submit()}
+                  htmlType="submit"
+                >
+                  Enviar
+                </Button>
+                ,
               </Modal>
             </div>
           )

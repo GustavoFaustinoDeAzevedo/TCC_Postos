@@ -6,15 +6,26 @@ import React, { useState } from "react";
 import { Table } from "antd";
 import { connect, useSelector } from "react-redux";
 import { Button, Input } from "antd";
-import { DeleteOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  SaveOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { DeleteDataSource, EditDataSource } from "../actions/generalActions";
 
 function Tabela(props) {
   const { dataSource, loading, user } = useSelector((state) => state.general);
   const [edit, setEdit] = useState(null);
   const [tempData, setTempData] = useState();
+
   return (
-    <Table dataSource={dataSource} loading={loading} style={{ height: "65vh" }}>
+    <Table
+      title={() => "teste"}
+      dataSource={dataSource}
+      loading={loading}
+      style={{ height: "65vh" }}
+    >
       <Table.Column
         title="Nome"
         dataIndex="nome"
