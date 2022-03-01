@@ -3,13 +3,13 @@ import { GetComments } from "../actions/generalActions";
 import { useEffect } from "react";
 import { useSelector, connect } from "react-redux";
 function Comments(props) {
-  const { getComments, comments } = useSelector((state) => state.general);
-  console.log(getComments);
+  const { comments } = useSelector((state) => state.general);
+
   useEffect(() => {
     props.dispatch(GetComments());
   }, []);
 
-  console.log(getComments);
+  console.log(comments);
   return (
     <List
       className="comment-list"

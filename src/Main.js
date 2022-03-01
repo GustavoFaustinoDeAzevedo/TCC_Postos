@@ -3,7 +3,7 @@
 //ant design eles já tinham planejado com ids, então tive que refazer
 //algumas coisas para que as linhas pudessem ser editáveis
 import React, { useEffect } from "react";
-import { Button, Divider, Layout, Menu, Spin } from "antd";
+import { Button, Divider, Layout, Menu, Space, Spin } from "antd";
 import { Route, Routes, Link, Navigate, BrowserRouter } from "react-router-dom";
 import {
   TableOutlined,

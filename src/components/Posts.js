@@ -3,7 +3,7 @@
 //123456
 //para acessar o add post
 import { connect } from "react-redux";
-import { List, Card, Button, Col, Form } from "antd";
+import { List, Card, Button, Col, Form, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { GetComments, GetPosts, PostComments } from "../actions/generalActions";
@@ -89,13 +89,18 @@ function Posts(props) {
                 width={1000}
               >
                 <AddPost form={form} onFinish={onFinish} />
-                <Button
-                  type="primary"
-                  onClick={() => form.submit()}
-                  htmlType="submit"
-                >
-                  Enviar
-                </Button>
+                <Space>
+                  <Button onClick={() => setIsModal2Visible(false)}>
+                    Cancelar
+                  </Button>
+                  <Button
+                    type="primary"
+                    onClick={() => form.submit()}
+                    htmlType="submit"
+                  >
+                    Enviar
+                  </Button>
+                </Space>
                 ,
               </Modal>
             </div>
@@ -113,9 +118,23 @@ function Posts(props) {
                 visible={isModal2Visible}
                 onOk={handleOk2}
                 onCancel={handleCancel2}
+                footer={[]}
                 width={1000}
               >
-                <AddPost />
+                <AddPost form={form} onFinish={onFinish} />
+                <Space>
+                  <Button onClick={() => setIsModal2Visible(false)}>
+                    Cancelar
+                  </Button>
+                  <Button
+                    type="primary"
+                    onClick={() => form.submit()}
+                    htmlType="submit"
+                  >
+                    Enviar
+                  </Button>
+                </Space>
+                ,
               </Modal>
             </div>
           )
