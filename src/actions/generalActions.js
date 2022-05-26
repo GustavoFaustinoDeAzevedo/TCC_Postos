@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useEffect } from "react";
 
 export const AddDataSource = function (data) {
   return function (dispatch) {
@@ -59,7 +60,14 @@ export const GetComments = function () {
     });
   };
 };
-
+export const GetEndereco = function (data) {
+  return function (dispatch) {
+    dispatch({
+      type: "GET_ENDERECO",
+      payload: axios.get("viacep.com.br/ws/" + data + "/json/"),
+    });
+  };
+};
 export const PostComments = function (data) {
   return function (dispatch) {
     dispatch({
@@ -80,3 +88,27 @@ export const AddUserPost = function (data) {
     });
   };
 };
+export const PrecoCombustivel = function (data) {
+  return function (dispatch) {
+    dispatch({
+      type: "GET_CSV",
+      payload: data,
+    });
+  };
+};
+export const ShowMap = function () {
+  return function (dispatch) {
+    dispatch({
+      type: "SHOW_MAP",
+    });
+  };
+};
+
+export function MobileTestAction(data) {
+  return function (dispatch) {
+    dispatch({
+      type: "MOBILE_TEST",
+      payload: data,
+    });
+  };
+}

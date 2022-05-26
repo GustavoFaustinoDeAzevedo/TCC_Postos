@@ -6,11 +6,11 @@ import reportWebVitals from "./reportWebVitals";
 import ErrorBoundary from "antd/lib/alert/ErrorBoundary";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ErrorBoundary>
-      <App />
-    </ErrorBoundary>
-  </React.StrictMode>,
+  //<React.StrictMode>
+  <ErrorBoundary>
+    <App />
+  </ErrorBoundary>,
+  //</React.StrictMode>,
   document.getElementById("root")
 );
 

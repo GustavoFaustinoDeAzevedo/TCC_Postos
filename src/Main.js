@@ -1,168 +1,98 @@
-//@@
-//Utilizei ids (keys) nos componentes do objeto porque na tabela do
-//ant design eles já tinham planejado com ids, então tive que refazer
-//algumas coisas para que as linhas pudessem ser editáveis
-import React, { useEffect } from "react";
-import { Button, Divider, Layout, Menu, Space, Spin } from "antd";
-import { Route, Routes, Link, Navigate, BrowserRouter } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import {
+  Affix,
+  Button,
+  Divider,
+  Layout,
+  Menu,
+  PageHeader,
+  Space,
+  Spin,
+} from 'antd';
+
+import { BrowserRouter } from 'react-router-dom';
+import MyComponent from './components/GoogleMapsAPI.js';
 import {
   TableOutlined,
   HomeOutlined,
   MessageOutlined,
-} from "@ant-design/icons";
-import "antd/dist/antd.css";
-import "./Main.css";
-import RegistrationForm from "./components/RegistrationForm";
-import { connect, useSelector } from "react-redux";
-import Tabela from "./components/Tabela";
-import Home from "./components";
-import Login from "./components/Login";
-import Posts from "./components/Posts";
-import OnLogOut from "./components/LoggedIn";
-import { GetPosts, LogIn, LogOut } from "./actions/generalActions";
+  UserOutlined,
+  SettingOutlined,
+} from '@ant-design/icons';
+import 'antd/dist/antd.css';
+
+import { connect, useSelector } from 'react-redux';
+import Tabela from './components/Tabela';
+import {
+  MobileTestAction,
+  PrecoCombustivel,
+  ShowMap,
+} from './actions/generalActions.js';
+import { usePapaParse } from 'react-papaparse';
 
 function Main(props) {
+  const { readRemoteFile } = usePapaParse();
   const { Header, Content, Footer, Sider } = Layout;
-
-  const { isAuthenticated, user, loading } = useSelector(
-    (state) => state.general
-  );
-  const styles = isAuthenticated ? "#002329" : "#002766";
-
-  const ClickButton = () => {
-    props.dispatch(LogOut());
-  };
+  const { loading } = useSelector((state) => state.general);
+  const [width, setWidth] = useState(window.innerWidth);
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("usuario"));
-
-    console.log(data);
-    localStorage.clear();
-
-    if (data) {
-      props.dispatch(LogIn(data));
-    } else {
-      props.dispatch(LogOut());
-    }
-
-    localStorage.setItem("usuario", JSON.stringify(data));
+    window.addEventListener('resize', setWidth(window.innerWidth));
+    return () => {
+      window.removeEventListener('resize', setWidth(window.innerWidth));
+      props.dispatch(MobileTestAction(width <= 768));
+    };
   }, []);
-
+  useEffect(() => {
+    readRemoteFile('/cadastro_revendas_glp-1-corrigido-2.csv', {
+      complete: (results) => {
+        props.dispatch(PrecoCombustivel(results.data));
+      },
+    });
+  }, []);
   return (
     <BrowserRouter>
-      <Layout hasSider>
-        <Sider
-          style={{
-            background: styles,
-            overflow: "auto",
-            height: "200vh",
-            position: "fixed",
-            left: 0,
-            top: 0,
-            bottom: 0,
-          }}
-        >
-          <div className="logo" />
-          <Menu
-            theme="dark"
-            style={{ background: styles }}
-            mode="inline"
-            defaultSelectedKeys={["4"]}
-          >
-            <Menu.Item key="1" icon={<HomeOutlined />}>
-              <Link to="/login">Home</Link>
-            </Menu.Item>
-            <Menu.Item key="2" icon={<TableOutlined />}>
-              <Link to="/usuarios">Lista de Usuários</Link>
-            </Menu.Item>
-            <Menu.Item key="3">
-              <Link to="/posts" icon={<MessageOutlined />}>
-                Posts
-              </Link>
-            </Menu.Item>
-          </Menu>
-        </Sider>
-        <Layout
-          className="site-layout"
-          style={{
-            marginLeft: 200,
-            height: "100%",
-            left: 0,
-            width: "100%",
-          }}
-        >
-          <Header
-            style={{
-              color: "rgba(255, 255, 255, 1)",
-              background: styles,
-              position: "fixed",
-              zIndex: 1,
-              width: "100%",
+      <Affix offsetTop={0}>
+        <div key={123456789}>
+          <PageHeader
+            ghost={false}
+            avatar={{
+              src: 'https://avatars1.githubusercontent.com/u/8186664?s=460&v=4',
             }}
-          >
-            {isAuthenticated && (
-              <div>
-                Olá {user.nome}{" "}
-                <Button onClick={() => ClickButton()} type="primary">
-                  Deslogar
-                </Button>
-              </div>
-            )}
-          </Header>
-          <Spin spinning={loading}>
-            <Content
-              style={{
-                styles,
-                padding: 80,
-                margin: "24px 16px 0",
-                overflow: "initial",
-                height: "100%",
-              }}
-            >
-              <div
-                className="site-layout-background"
-                style={{ height: "100%", width: "100%" }}
+            title="Desconectado"
+            subTitle={<Button icon={<SettingOutlined />} key={184798} />}
+            extra={[
+              <Button
+                key={3}
+                onClick={() => {
+                  props.dispatch(ShowMap());
+                }}
               >
-                <Home />
-                <Routes>
-                  <Route path="/registrar" element={<RegistrationForm />} />
-                  {isAuthenticated ? (
-                    <Route
-                      path="/login"
-                      element={<Navigate replace to="/perfil" />}
-                    ></Route>
-                  ) : (
-                    <Route path="/login" element={<Login />} />
-                  )}
-                  {!isAuthenticated ? (
-                    <Route
-                      path="/perfil"
-                      element={<Navigate replace to="/login" />}
-                    />
-                  ) : (
-                    <Route path="/perfil" element={<OnLogOut />} />
-                  )}
-                  <Route path="/posts" element={<Posts />} />
+                Mapa
+              </Button>,
+              <Button key={2}>Pesquisar</Button>,
+              <Button key={1} type="primary">
+                Primary
+              </Button>,
+            ]}
+          />
 
-                  <Route path="/usuarios" element={<Tabela />} />
-                </Routes>
-                <Divider></Divider>
-              </div>
-            </Content>
-            <Footer
-              style={{
-                borderTop: "1px solid #e8e8e8",
-                position: "fixed",
-                left: 0,
-                bottom: 0,
-                width: "100%",
-                backgroundColor: "white",
-                textAlign: "center",
-                display: "flex",
-              }}
-            ></Footer>
-          </Spin>
-        </Layout>
-      </Layout>
+          <MyComponent />
+        </div>
+      </Affix>
+
+      <Spin style={{ overflow: 'hidden' }} spinning={loading}>
+        <div
+          style={{
+            backgroundColor: 'rgba(255,255,255,1)',
+            height: '100%',
+            width: '100%',
+            overflow: 'auto',
+          }}
+        >
+          <Tabela />
+          <Divider></Divider>
+        </div>
+      </Spin>
     </BrowserRouter>
   );
 }
