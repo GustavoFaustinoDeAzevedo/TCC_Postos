@@ -42,6 +42,12 @@ var initialState = {
 
 const generalReducer = function (state = initialState, action) {
   switch (action.type) {
+    case 'ADD_DATA_SOURCE':
+      state = {
+        ...state,
+        dataSource: [...state.dataSource, action.payload],
+      };
+      break;
     case 'GET_CSV_PENDING':
       state = {
         ...state,

@@ -10,7 +10,7 @@ import {
   Spin,
 } from 'antd';
 
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
 import MyComponent from './components/GoogleMapsAPI.js';
 import {
   TableOutlined,
@@ -18,29 +18,38 @@ import {
   MessageOutlined,
   UserOutlined,
   SettingOutlined,
+  LoginOutlined,
 } from '@ant-design/icons';
 import 'antd/dist/antd.css';
-
+import OnLogOut from './components/LoggedIn';
+import RegistrationForm from './components/RegistrationForm';
 import { connect, useSelector } from 'react-redux';
 import Tabela from './components/Tabela';
 import {
+  LogIn,
+  LogOut,
   MobileTestAction,
   PrecoCombustivel,
   ShowMap,
 } from './actions/generalActions.js';
 import { usePapaParse } from 'react-papaparse';
-
+import Login from './components/Login.js';
+import Home from './components';
 function Main(props) {
   const { readRemoteFile } = usePapaParse();
   const { Header, Content, Footer, Sider } = Layout;
-  const { loading } = useSelector((state) => state.general);
-  const [width, setWidth] = useState(window.innerWidth);
+  const { isAuthenticated, loading } = useSelector((state) => state.general);
   useEffect(() => {
-    window.addEventListener('resize', setWidth(window.innerWidth));
-    return () => {
-      window.removeEventListener('resize', setWidth(window.innerWidth));
-      props.dispatch(MobileTestAction(width <= 768));
-    };
+    const data = JSON.parse(localStorage.getItem('usuario'));
+
+    console.log(data);
+    localStorage.clear();
+
+    if (data) {
+      props.dispatch(LogIn(data));
+    } else {
+      props.dispatch(LogOut());
+    }
   }, []);
   useEffect(() => {
     readRemoteFile('/cadastro_revendas_glp-1-corrigido-2.csv', {
@@ -51,34 +60,7 @@ function Main(props) {
   }, []);
   return (
     <BrowserRouter>
-      <Affix offsetTop={0}>
-        <div key={123456789}>
-          <PageHeader
-            ghost={false}
-            avatar={{
-              src: 'https://avatars1.githubusercontent.com/u/8186664?s=460&v=4',
-            }}
-            title="Desconectado"
-            subTitle={<Button icon={<SettingOutlined />} key={184798} />}
-            extra={[
-              <Button
-                key={3}
-                onClick={() => {
-                  props.dispatch(ShowMap());
-                }}
-              >
-                Mapa
-              </Button>,
-              <Button key={2}>Pesquisar</Button>,
-              <Button key={1} type="primary">
-                Primary
-              </Button>,
-            ]}
-          />
-
-          <MyComponent />
-        </div>
-      </Affix>
+      <Home />
 
       <Spin style={{ overflow: 'hidden' }} spinning={loading}>
         <div
@@ -89,7 +71,26 @@ function Main(props) {
             overflow: 'auto',
           }}
         >
-          <Tabela />
+          <Routes>
+            <Route path="/registrar" element={<RegistrationForm />} />
+            {isAuthenticated ? (
+              <Route
+                path="/login"
+                element={<Navigate replace to="/perfil" />}
+              ></Route>
+            ) : (
+              <Route path="/login" element={<Login />} />
+            )}
+            {!isAuthenticated ? (
+              <Route
+                path="/perfil"
+                element={<Navigate replace to="/login" />}
+              />
+            ) : (
+              <Route path="/perfil" element={<OnLogOut />} />
+            )}
+            <Route path="/listagem" element={<Tabela />} />
+          </Routes>
           <Divider></Divider>
         </div>
       </Spin>

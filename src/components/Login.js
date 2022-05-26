@@ -1,17 +1,17 @@
-import { Button, Input, Form, Checkbox } from "antd";
-import { Link } from "react-router-dom";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { Button, Input, Form, Checkbox } from 'antd';
+import { Link } from 'react-router-dom';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
-import { connect, useSelector } from "react-redux";
-import { LogIn, LogOut } from "../actions/generalActions";
-import { OnLogOut } from "./LoggedIn";
+import { connect, useSelector } from 'react-redux';
+import { LogIn, LogOut } from '../actions/generalActions';
+import { OnLogOut } from './LoggedIn';
 
 function Login(props) {
   const { dataSource, isAuthenticated } = useSelector((state) => state.general);
 
   const onFinish = (values) => {
     console.log(
-      "Received values of form: ",
+      'Received values of form: ',
       dataSource.findIndex(
         (x) => x.email === values.email && x.senha === values.password
       )
@@ -23,13 +23,20 @@ function Login(props) {
       (x) => x.email === values.email && x.senha === values.password
     ) !== -1
       ? props.dispatch(LogIn(dataSource[index]))
-      : alert("erro");
+      : alert('erro');
     console.log(isAuthenticated);
-    localStorage.setItem("usuario", JSON.stringify(dataSource[index]));
+    localStorage.setItem('usuario', JSON.stringify(dataSource[index]));
   };
 
   return (
-    <div style={{ height: "65vh" }}>
+    <div
+      style={{
+        overflow: 'auto',
+        padding: '10% 15%',
+        background: '#ececec',
+        height: '65vh',
+      }}
+    >
       <Form
         style={{ width: 304 }}
         name="normal_login"
@@ -39,7 +46,7 @@ function Login(props) {
       >
         <Form.Item
           name="email"
-          rules={[{ required: true, message: "Digite o seu email!" }]}
+          rules={[{ required: true, message: 'Digite o seu email!' }]}
         >
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
@@ -48,7 +55,7 @@ function Login(props) {
         </Form.Item>
         <Form.Item
           name="password"
-          rules={[{ required: true, message: "Digite a sua senha!" }]}
+          rules={[{ required: true, message: 'Digite a sua senha!' }]}
         >
           <Input
             prefix={<LockOutlined className="site-form-item-icon" />}

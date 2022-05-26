@@ -1,6 +1,6 @@
-import { Button } from "antd";
-import { useSelector, connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Button } from 'antd';
+import { useSelector, connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 function OnLogOut(props) {
   console.log(props);
@@ -12,13 +12,20 @@ function OnLogOut(props) {
   };
 
   return (
-    <div style={{ height: "65vh" }}>
+    <div
+      style={{
+        overflow: 'auto',
+        padding: '10% 15%',
+        background: '#ececec',
+        height: '65vh',
+      }}
+    >
       {isAuthenticated && (
         <div>
           Olá {user.nome} <br />
           Você está logado! <br></br>
-          <Link to={"/login"}>
-            {" "}
+          <Link to={'/login'}>
+            {' '}
             <Button onClick={() => ClickButton()} type="primary">
               Deslogar
             </Button>

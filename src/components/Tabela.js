@@ -18,6 +18,7 @@ import {
 import { usePapaParse } from 'react-papaparse';
 import { connect, useSelector } from 'react-redux';
 import { Button, Input } from 'antd';
+
 import cep from 'cep-promise';
 import MobileTest from './MobileTest';
 import SearchInTable from './SearchFunction';
@@ -95,7 +96,7 @@ function Tabela(props) {
           dataSource={tabelaPrecos}
           renderItem={(data) => (
             <List.Item style={{ paddingTop: '30px' }}>
-              <Badge count={'0km'} color={'blue'} offset={[-60, 69]}>
+              <Badge count={'0km'} color={'blue'} offset={[-100, 125]}>
                 <Card
                   bordered={false}
                   title={data[3]}
@@ -105,18 +106,27 @@ function Tabela(props) {
                     <EditOutlined key="edit" />,
                     <EllipsisOutlined key="ellipsis" />,
                   ]}
-                  style={{ border: '4px solid black', borderRadius: '10px' }}
+                  style={{
+                    background: '#bdbdbd',
+                    border: '4px solid black',
+                    borderRadius: '10px',
+                  }}
                 >
                   <Card
                     hoverable={false}
-                    style={{ paddingLeft: '25px', width: '100%' }}
+                    style={{
+                      borderRadius: '10px 10px 0px 0',
+
+                      width: '100%',
+                    }}
                   >
                     {data[5]}
                   </Card>
 
-                  <Card.Grid
+                  <Card
                     hoverable={false}
                     style={{
+                      borderRadius: '0px 0px 10px 10px',
                       fontFamily: 'Lucida Console',
                       textAlign: 'left',
                       width: '100%',
@@ -131,8 +141,8 @@ function Tabela(props) {
                       allowHalf
                     />
                     <Text type="secondary"> (0)</Text>
-                  </Card.Grid>
-                  <Collapse bordered={false} defaultActiveKey={['1']}>
+                  </Card>
+                  <Collapse bordered={false} ghost defaultActiveKey={['1']}>
                     <CollapsePanel
                       header={
                         <>
@@ -151,12 +161,12 @@ function Tabela(props) {
                               paddingLeft: '15px',
                             }}
                           >
-                            {' '}
                             Mostrar Preços
                           </Text>
                         </>
                       }
                       style={{
+                        background: '#bdbdbd',
                         fontFamily: 'Lucida Console',
                         textAlign: 'left',
                         width: '100%',
@@ -259,7 +269,7 @@ function Tabela(props) {
                             <span style={{ fontSize: '2em' }}>G</span>
                             <span
                               style={{
-                                fontSize: '0.8em',
+                                fontSize: '0.6em',
                                 lineHeight: '44px',
                                 float: 'right',
                               }}
@@ -286,7 +296,7 @@ function Tabela(props) {
                             <span style={{ fontSize: '2em' }}>G</span>
                             <span
                               style={{
-                                fontSize: '0.6em',
+                                fontSize: '0.5em',
                                 lineHeight: '44px',
                                 float: 'right',
                               }}
@@ -315,6 +325,7 @@ function Tabela(props) {
                         >
                           <div
                             style={{
+                              overflow: 'auto',
                               fontSize: '2em',
                               border: '2px solid white',
                               padding: '10px 5px',
@@ -334,6 +345,7 @@ function Tabela(props) {
                         >
                           <div
                             style={{
+                              overflow: 'auto',
                               fontSize: '2em',
                               border: '2px solid white',
                               padding: '10px 5px',
@@ -354,6 +366,7 @@ function Tabela(props) {
                         >
                           <div
                             style={{
+                              overflow: 'auto',
                               fontSize: '2em',
                               border: '2px solid white',
                               padding: '10px 5px',
@@ -373,6 +386,7 @@ function Tabela(props) {
                         >
                           <div
                             style={{
+                              overflow: 'auto',
                               fontSize: '2em',
                               border: '2px solid white',
                               padding: '10px 5px',
@@ -393,6 +407,7 @@ function Tabela(props) {
                         >
                           <div
                             style={{
+                              overflow: 'auto',
                               fontSize: '2em',
                               border: '2px solid white',
                               padding: '10px 5px',
