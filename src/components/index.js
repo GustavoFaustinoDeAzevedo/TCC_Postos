@@ -66,7 +66,7 @@ const Home = (props) => {
                   Mapa
                 </Button>
                 ,<Button key={215615656}>Pesquisar</Button>,
-                <Link to="/listagem">
+                <Link to={process.env.PUBLIC_URL + '/listagem'}>
                   <Button key={1156156} type="primary">
                     Lista de Postos
                   </Button>

@@ -52,11 +52,14 @@ function Main(props) {
     }
   }, []);
   useEffect(() => {
-    readRemoteFile('/cadastro_revendas_glp-1-corrigido-2.csv', {
-      complete: (results) => {
-        props.dispatch(PrecoCombustivel(results.data));
-      },
-    });
+    readRemoteFile(
+      process.env.PUBLIC_URL + '/cadastro_revendas_glp-1-corrigido-2.csv',
+      {
+        complete: (results) => {
+          props.dispatch(PrecoCombustivel(results.data));
+        },
+      }
+    );
   }, []);
   return (
     <BrowserRouter>
@@ -89,7 +92,10 @@ function Main(props) {
             ) : (
               <Route path="/perfil" element={<OnLogOut />} />
             )}
-            <Route path="/listagem" element={<Tabela />} />
+            <Route
+              path={process.env.PUBLIC_URL + '/listagem'}
+              element={<Tabela />}
+            />
           </Routes>
           <Divider></Divider>
         </div>
