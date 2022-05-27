@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/TCC_Postos/static/css/main.36ad3865.css",
-    "main.js": "/TCC_Postos/static/js/main.ab820d1c.js",
+    "main.js": "/TCC_Postos/static/js/main.f49dae02.js",
     "static/js/787.667d4d3e.chunk.js": "/TCC_Postos/static/js/787.667d4d3e.chunk.js",
     "index.html": "/TCC_Postos/index.html",
     "main.36ad3865.css.map": "/TCC_Postos/static/css/main.36ad3865.css.map",
-    "main.ab820d1c.js.map": "/TCC_Postos/static/js/main.ab820d1c.js.map",
+    "main.f49dae02.js.map": "/TCC_Postos/static/js/main.f49dae02.js.map",
     "787.667d4d3e.chunk.js.map": "/TCC_Postos/static/js/787.667d4d3e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.36ad3865.css",
-    "static/js/main.ab820d1c.js"
+    "static/js/main.f49dae02.js"
   ]
 }
