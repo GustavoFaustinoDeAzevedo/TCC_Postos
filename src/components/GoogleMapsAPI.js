@@ -1,28 +1,61 @@
-import React, { useEffect, useState, useCallback, memo } from 'react';
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import { useSelector } from 'react-redux';
-
-const center = {
-  lat: -3.745,
-  lng: -38.523,
-};
-
-function MyComponent() {
+import React, { useEffect, useState, useCallback, memo, useRef } from 'react';
+/*import {
+  GoogleMap,
+  Marker,
+  useJsApiLoader,
+  Autocomplete,
+} from '@react-google-maps/api';*/
+import { connect, useSelector } from 'react-redux';
+import {
+  HomeOutlined,
+  LikeOutlined,
+  SendOutlined,
+  ZoomInOutlined,
+  ZoomOutOutlined,
+} from '@ant-design/icons';
+import { Button, Card, Drawer, Input, List, Popover, Rate, Spin } from 'antd';
+import {
+  ActiveLoadting,
+  GetCoord,
+  HideShowMapDrawer,
+  PrecoCombustivel,
+  ProcurarPosto,
+  SetLocation,
+  ShowMapDrawer,
+} from '../actions/generalActions';
+import {
+  AttributionControl,
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  Tooltip,
+  useMap,
+  useMapEvent,
+  useMapEvents,
+  ZoomControl,
+} from 'react-leaflet';
+import './Maps.css';
+import Tabela from './Tabela';
+import Search from 'antd/lib/input/Search';
+/*function MyComponent(props) {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: 'AIzaSyB5e_duPiyEM9Sl7b5KwbT08BSsV-QdL7o',
   });
-  const { mapHeight } = useSelector((state) => state.general);
+  const { latitude, longitude, mapHeight } = useSelector(
+    (state) => state.general
+  );
   const [map, setMap] = useState(null);
-
-  const onLoad = useCallback(function callback(map) {
-    const bounds = new window.google.maps.LatLngBounds(center);
-    map.fitBounds(bounds);
-    setMap(map);
-  }, []);
-
-  const onUnmount = useCallback(function callback(map) {
-    setMap(null);
+  const [visible, setVisible] = useState(null);
+  const [localCoord, SetLocalCoord] = useState([]);
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      SetLocalCoord([position.coords.latitude, position.coords.longitude]);
+      props.dispatch(
+        SetLocation([position.coords.latitude, position.coords.longitude])
+      );
+    });
   }, []);
 
   return isLoaded ? (
@@ -30,13 +63,294 @@ function MyComponent() {
       <GoogleMap
         setClickableIcons={false}
         mapContainerStyle={{ height: mapHeight }} //400px
-        center={center}
-        zoom={10}
-      ></GoogleMap>
+        center={{
+          lat: latitude,
+          lng: longitude,
+        }}
+        zoom={19}
+      >
+        <div style={{ width: '100%', padding: '60px 0px 0px 10px' }}>
+          <Button
+            style={{ padding: '5px 50px 5px 50px' }}
+            onClick={() => props.dispatch(SetLocation(localCoord))}
+            type="primary"
+          >
+            Sua Posição
+          </Button>
+        </div>
+
+        <Marker
+          name="Sua Posição"
+          position={{
+            lat: localCoord[0],
+            lng: localCoord[1],
+          }}
+        ></Marker>
+      </GoogleMap>
     </div>
   ) : (
     <></>
   );
-}
+}*/
 
-export default memo(MyComponent);
+function MyComponent(props) {
+  const {
+    latitude,
+    longitude,
+    mapHeight,
+    mapDrawer,
+    isAuthenticated,
+    coord,
+    loading,
+    tabelaPrecosPesquisa,
+    tabelaPrecos,
+  } = useSelector((state) => state.general);
+  const [localCoord, setLocalCoord] = useState({ lat: 0, lng: 0 });
+
+  //const [localCoord,SetLocalCoord] = useEffect(position);
+  useEffect(() => {
+    props.dispatch(ActiveLoadting());
+
+    navigator.geolocation.getCurrentPosition((position) => {
+      setLocalCoord({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      });
+      props.dispatch(
+        GetCoord(
+          [position.coords.latitude, position.coords.longitude].toString()
+        )
+      );
+    });
+  }, []);
+  const mapRef = useRef(null);
+  const handleClick = () => {
+    mapRef.current._popup._closeButton.addEventListener('click', (event) => {
+      event.preventDefault();
+    });
+  };
+
+  function ChangeMapView() {
+    const map = useMap();
+    map.setView(coord, map.getZoom(), { animate: 'false' });
+
+    return null;
+  }
+  const map = (
+    <div
+      style={{
+        position: 'relative',
+        minHeight: window.screen.width < 780 ? '60vh' : '80vh',
+        width: '100%',
+      }}
+    >
+      <Drawer
+        title="Resultado"
+        placement="top"
+        height={window.screen.width < 780 ? '60vh' : '80vh'}
+        getContainer={false}
+        style={{
+          position: 'absolute',
+        }}
+        onClose={() => {
+          props.dispatch(ShowMapDrawer(false));
+        }}
+        visible={mapDrawer}
+      >
+        <Tabela />
+      </Drawer>
+
+      <MapContainer
+        dragging={true}
+        center={localCoord}
+        zoom={15}
+        zoomControl={false}
+        scrollWheelZoom={true}
+        style={{
+          minHeight: window.screen.width < 780 ? '69vh' : '86vh',
+          width: '100%',
+        }}
+        ref={mapRef}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        {!mapDrawer && (
+          <>
+            <div style={{ height: '100%', width: '100%' }}>
+              <Button
+                tootip="Mostrar Seu Local"
+                icon={<SendOutlined />}
+                onClick={() => {
+                  navigator.geolocation.getCurrentPosition((position) => {
+                    setLocalCoord({
+                      lat: position.coords.latitude,
+                      lng: position.coords.longitude,
+                    });
+                    props.dispatch(
+                      GetCoord(
+                        [
+                          position.coords.latitude,
+                          position.coords.longitude,
+                        ].toString()
+                      )
+                    );
+                  });
+                }}
+                style={{
+                  top: window.screen.width < 780 ? '67%' : '83%',
+                  left: '10px',
+                  position: 'absolute',
+                  zIndex: '1000',
+                }}
+              />
+            </div>
+            <ZoomControl position="bottomleft" zoomInText="+" zoomOutText="-" />
+          </>
+        )}
+        <List
+          dataSource={tabelaPrecos}
+          renderItem={(data) => (
+            <List.Item style={{ paddingTop: '35px' }}>
+              <Marker
+                eventHandlers={{
+                  click: (e) => handleClick(),
+                }}
+                position={data[6].split(',')}
+              >
+                <Popup>
+                  {data[0]} <br /> {data[1]}
+                  <br /> {data[2]}
+                  <br />
+                  <Rate
+                    disabled={!isAuthenticated}
+                    defaultValue={1 + Math.random() * 4}
+                  />
+                  <br />
+                  <Card
+                    style={{
+                      backgroundColor: '#52c41a',
+                      color: 'white',
+                      borderRadius: '10px',
+                      lineHeight: '100%',
+                      fontSize: '0.75em',
+                    }}
+                  >
+                    <div>
+                      <div>
+                        <span>
+                          Diesel:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          {(6 + Math.random()).toFixed(3)}
+                          &nbsp;&nbsp;&nbsp;
+                          <Rate
+                            disabled={!isAuthenticated}
+                            onChange={() => {
+                              if (isAuthenticated) {
+                              } else {
+                                alert(
+                                  'Precisa autenticar para fazer esta ação!'
+                                );
+                              }
+                            }}
+                            character={<LikeOutlined />}
+                            defaultValue={0}
+                            count={1}
+                          />
+                        </span>
+                      </div>
+                      <br />
+                      <div>
+                        Etanol:
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        {(6 + Math.random()).toFixed(3)}
+                        &nbsp;&nbsp;&nbsp;
+                        <Rate
+                          disabled={!isAuthenticated}
+                          onChange={() => {
+                            if (isAuthenticated) {
+                            } else {
+                              alert('Precisa autenticar para fazer esta ação!');
+                            }
+                          }}
+                          character={<LikeOutlined />}
+                          defaultValue={0}
+                          count={1}
+                        />
+                      </div>
+                      <br />
+                      <div>
+                        Gasolina:
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        {(7 + Math.random()).toFixed(3)}
+                        &nbsp;&nbsp;&nbsp;
+                        <Rate
+                          disabled={!isAuthenticated}
+                          onChange={() => {
+                            if (isAuthenticated) {
+                            } else {
+                              alert('Precisa autenticar para fazer esta ação!');
+                            }
+                          }}
+                          character={<LikeOutlined />}
+                          defaultValue={0}
+                          count={1}
+                        />
+                      </div>
+                      <br />
+                      <div>
+                        G. Aditivada: &nbsp;&nbsp;&nbsp;&nbsp;
+                        {(7 + Math.random()).toFixed(3)}
+                        &nbsp;&nbsp;&nbsp;
+                        <Rate
+                          disabled={!isAuthenticated}
+                          onChange={() => {
+                            if (isAuthenticated) {
+                            } else {
+                              alert('Precisa autenticar para fazer esta ação!');
+                            }
+                          }}
+                          character={<LikeOutlined />}
+                          defaultValue={0}
+                          count={1}
+                        />
+                      </div>
+                      <br />
+                      <span>
+                        <div>
+                          G. A. Premium:&nbsp;
+                          {(7 + Math.random()).toFixed(3)}
+                          &nbsp;&nbsp;&nbsp;
+                          <Rate
+                            disabled={!isAuthenticated}
+                            onChange={() => {
+                              if (isAuthenticated) {
+                              } else {
+                                alert(
+                                  'Precisa autenticar para fazer esta ação!'
+                                );
+                              }
+                            }}
+                            character={<LikeOutlined />}
+                            defaultValue={0}
+                            count={1}
+                          />
+                        </div>
+                      </span>
+                    </div>
+                  </Card>
+                </Popup>
+                <Tooltip direction="auto" offset={[-8, -2]} opacity={3}>
+                  <span>{data[0]}</span>
+                </Tooltip>
+              </Marker>
+            </List.Item>
+          )}
+        />
+        <ChangeMapView />
+      </MapContainer>
+    </div>
+  );
+  return <div>{map}</div>;
+}
+export default connect()(MyComponent);

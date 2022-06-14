@@ -2,24 +2,18 @@
 //gustavo@hotmail.com
 //123456
 //para acessar o add post
-import { connect } from "react-redux";
-import { List, Card, Button, Col, Form, Space } from "antd";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { GetComments, GetPosts, PostComments } from "../actions/generalActions";
-import Modal from "antd/lib/modal/Modal";
-import Comments from "./Comments";
-import { PlusCircleOutlined } from "@ant-design/icons";
-import AddPost from "./AddPost";
-import { AddUserPost } from "../actions/generalActions";
+import { connect } from 'react-redux';
+import { List, Card, Button, Col, Form, Space } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { GetComments, GetPosts, PostComments } from '../actions/generalActions';
+import Modal from 'antd/lib/modal/Modal';
+import Comments from './Comments';
+import { PlusCircleOutlined } from '@ant-design/icons';
+import AddPost from './AddPost';
+import { AddUserPost } from '../actions/generalActions';
 
 function Posts(props) {
-  useEffect(() => {
-    props.dispatch(GetPosts());
-  }, []);
-  useEffect(() => {
-    props.dispatch(GetComments());
-  }, []);
   const { getPosts, loading, getComments, user } = useSelector(
     (state) => state.general
   );
@@ -29,7 +23,7 @@ function Posts(props) {
     values.key = user.key;
     console.log(values);
     props.dispatch(AddUserPost(values));
-    console.log("Received values of form: ", values);
+    console.log('Received values of form: ', values);
     //window.location.reload();
   };
 
@@ -66,7 +60,7 @@ function Posts(props) {
         itemLayout="vertical"
         size="large"
         pagination={{
-          position: "both",
+          position: 'both',
           onChange: (page) => {
             console.log(page);
           },
@@ -144,7 +138,7 @@ function Posts(props) {
             <Card
               title={<h1>{item.title}</h1>}
               bordered={false}
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
             >
               <p>{item.body}</p>
             </Card>

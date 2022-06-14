@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, Checkbox, Button } from 'antd';
 import MaskedInput from 'antd-mask-input/build/main/lib/MaskedInput';
 import { connect, useSelector } from 'react-redux';
-import { AddDataSource } from '../actions/generalActions';
+import { AddDataSource, ShowMapDrawer } from '../actions/generalActions';
 import { Link, useNavigate } from 'react-router-dom';
 function RegistrationForm(props) {
   const [form] = Form.useForm();
@@ -12,15 +12,18 @@ function RegistrationForm(props) {
     values.key = '' + (parseInt(dataSource[dataSource.length - 1].key, 10) + 1);
     props.dispatch(AddDataSource(values));
     console.log('Received values of form: ', values);
-    navigate(`/login`);
+    navigate('/');
   };
+  useEffect(() => {
+    props.dispatch(ShowMapDrawer(false));
+  }, []);
   return (
     <Form
       style={{
         overflow: 'auto',
         padding: '5% 15%',
         background: '#ececec',
-        height: '65vh',
+        height: '86vh',
       }}
       form={form}
       name="register"

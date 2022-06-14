@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import { connect, useSelector } from 'react-redux';
-import { LogIn, LogOut } from '../actions/generalActions';
+import { LogIn, LogOut, ShowMapDrawer } from '../actions/generalActions';
 import { OnLogOut } from './LoggedIn';
+import { useEffect } from 'react';
 
 function Login(props) {
   const { dataSource, isAuthenticated } = useSelector((state) => state.general);
@@ -24,21 +25,30 @@ function Login(props) {
     ) !== -1
       ? props.dispatch(LogIn(dataSource[index]))
       : alert('erro');
-    console.log(isAuthenticated);
-    localStorage.setItem('usuario', JSON.stringify(dataSource[index]));
+    console.log(values.remember);
+    if (values.remember) {
+      localStorage.setItem('usuario', JSON.stringify(dataSource[index]));
+    } else {
+      localStorage.clear();
+    }
   };
-
+  useEffect(() => {
+    props.dispatch(ShowMapDrawer(false));
+  }, []);
   return (
     <div
       style={{
-        overflow: 'auto',
+        overflow: 'hidden',
         padding: '10% 15%',
         background: '#ececec',
-        height: '65vh',
+        height: '86vh',
       }}
     >
       <Form
-        style={{ width: 304 }}
+        style={{
+          width: 304,
+          padding: window.screen.width < 780 ? '5% 25% 0 0%' : '0',
+        }}
         name="normal_login"
         className="login-form"
         initialValues={{ remember: true }}
@@ -65,12 +75,8 @@ function Login(props) {
         </Form.Item>
         <Form.Item>
           <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Remember me</Checkbox>
+            <Checkbox>Lembrar Usuário</Checkbox>
           </Form.Item>
-
-          <a className="login-form-forgot" href="">
-            Forgot password
-          </a>
         </Form.Item>
 
         <Form.Item>
@@ -80,7 +86,7 @@ function Login(props) {
             className="login-form-button"
           >
             Log in
-          </Button>
+          </Button>{' '}
           Ou <Link to="/registrar">Registre!</Link>
         </Form.Item>
       </Form>

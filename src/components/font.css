@@ -1,0 +1,13 @@
+@font-face {
+  font-family: 'DigitalFont';
+  src: url('${process.env.PUBLIC_URL}/webfont.eot'); /* IE9 Compat Modes */
+  src: url('${process.env.PUBLIC_URL}/webfont.eot?#iefix')
+      format('embedded-opentype'),
+    /* IE6-IE8 */ url('${process.env.PUBLIC_URL}/webfont.woff2') format('woff2'),
+    /* Super Modern Browsers */ url('${process.env.PUBLIC_URL}/webfont.woff')
+      format('woff'),
+    /* Pretty Modern Browsers */ url('${process.env.PUBLIC_URL}/webfont.ttf')
+      format('truetype'),
+    /* Safari, Android, iOS */
+      url('${process.env.PUBLIC_URL}/webfont.svg#svgFontName') format('svg'); /* Legacy iOS */
+}

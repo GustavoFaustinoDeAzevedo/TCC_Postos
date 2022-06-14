@@ -1,27 +1,52 @@
 import {
+  AudioOutlined,
   HomeOutlined,
   LoginOutlined,
+  LogoutOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
-import { Affix, Breadcrumb, Button, PageHeader } from 'antd';
+import {
+  Affix,
+  Breadcrumb,
+  Button,
+  Drawer,
+  PageHeader,
+  Space,
+  Tooltip,
+  Input,
+} from 'antd';
+import { Autocomplete } from '@react-google-maps/api';
+import { useEffect, useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-import { ShowMap } from '../actions/generalActions';
+import {
+  LogOut,
+  PrecoCombustivel,
+  ProcurarPosto,
+  ShowMap,
+  ShowMapDrawer,
+} from '../actions/generalActions';
 import MyComponent from '../components/GoogleMapsAPI.js';
+import Location from '../components/UserLocation';
 import Tabela from './Tabela';
+import { usePapaParse } from 'react-papaparse';
 
 const Home = (props) => {
-  const { isAuthenticated, user, loading } = useSelector(
+  const { tabelaPrecos } = useSelector((state) => state.general);
+  const [visible, setVisible] = useState(false);
+  const { isAuthenticated, user, mapHeight, loading } = useSelector(
     (state) => state.general
   );
+  const { Search } = Input;
   const breadcrumbNameMap = {
     '/perfil': 'Perfil',
     '/registrar': 'Registro',
     '/usuarios': 'Tabela de Usuários',
     '/posts': 'Posts',
     '/login': 'Login',
-    '/listagem': 'Lista de Postos',
+    '/mapa': 'Mapa',
   };
+  Location();
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').filter((i) => i);
   const extraBreadcrumbItems = pathSnippets.map((_, index) => {
@@ -34,54 +59,111 @@ const Home = (props) => {
   });
   const breadcrumbItems = [
     <Breadcrumb.Item key="home">
-      <Link to="/">
+      <Link to="">
         <HomeOutlined />
       </Link>
     </Breadcrumb.Item>,
   ].concat(extraBreadcrumbItems);
+
   return (
-    <div>
-      <Affix offsetTop={0}>
-        <div key={123456789}>
-          <PageHeader
-            ghost={false}
-            title={isAuthenticated ? 'Olá ' + user.nome : 'Desconectado'}
-            subTitle={
-              !isAuthenticated ? (
-                <Link to="/login">
+    <div key={123456789} style={{ overflow: 'hidden' }}>
+      <PageHeader
+        ghost={false}
+        title={
+          <div style={{ paddingTop: '10px' }}>
+            {isAuthenticated
+              ? window.screen.width < 780
+                ? 'Olá ' + user.nome.substring(0, 14)
+                : 'Olá ' + user.nome.substring(0, 50)
+              : 'Desconectado'}
+          </div>
+        }
+        subTitle={
+          <div style={{ paddingTop: '10px' }}>
+            {!isAuthenticated ? (
+              <Tooltip title="Conectar">
+                <Link to="">
                   <Button icon={<LoginOutlined />} key={184798} />
                 </Link>
-              ) : (
-                <Button icon={<SettingOutlined />} key={184798} />
-              )
-            }
-            extra={[
+              </Tooltip>
+            ) : (
               <>
-                <Button
-                  key={34894489}
-                  onClick={() => {
-                    props.dispatch(ShowMap());
-                  }}
-                >
-                  Mapa
-                </Button>
-                ,<Button key={215615656}>Pesquisar</Button>,
-                <Link to={process.env.PUBLIC_URL + '/listagem'}>
-                  <Button key={1156156} type="primary">
-                    Lista de Postos
+                <Space>
+                  <Tooltip title="Configurações">
+                    <Button
+                      icon={<SettingOutlined />}
+                      onClick={() => setVisible(true)}
+                      key={1847918}
+                    />
+                  </Tooltip>
+                  <Tooltip title="Desconectar">
+                    <Button
+                      icon={<LogoutOutlined />}
+                      onClick={() => {
+                        props.dispatch(LogOut());
+                        localStorage.clear();
+                      }}
+                      key={1847928}
+                    />
+                  </Tooltip>
+                </Space>
+                <Drawer
+                  title="Configuração de Perfil"
+                  placement="right"
+                  onClose={() => setVisible(false)}
+                  visible={visible}
+                ></Drawer>
+              </>
+            )}
+            {useLocation().pathname !== '/mapa' && (
+              <Link style={{ paddingLeft: '20px' }} to="mapa">
+                {!isAuthenticated && (
+                  <Button key={'postos'} type="primary">
+                    Mapa
                   </Button>
-                </Link>
-                ,
-              </>,
-            ]}
-          />
-
-          <MyComponent />
-        </div>
-        <Breadcrumb style={{ paddingLeft: '20px', backgroundColor: 'white' }}>
-          {breadcrumbItems}
-        </Breadcrumb>
-      </Affix>
+                )}
+              </Link>
+            )}
+          </div>
+        }
+        extra={[
+          <div>
+            {useLocation().pathname === '/mapa' && (
+              <>
+                <div>
+                  <Input.Group compact>
+                    <Search
+                      allowClear
+                      enterButton="Pesquisar Postos"
+                      placeholder="Insira texto para pesquisa"
+                      onSearch={(e) => {
+                        props.dispatch(ProcurarPosto(e.toLowerCase()));
+                        props.dispatch(ShowMapDrawer(true));
+                      }}
+                    />
+                  </Input.Group>
+                </div>
+                {/*<div style={{ paddingTop: '10px' }}>
+                  <Button
+                    type="primary"
+                    style={{ padding: '0px 200px' }}
+                    key={'mapa'}
+                    onClick={() => {
+                      props.dispatch(ShowMap());
+                    }}
+                  >
+                    Mapa
+                  </Button>
+                </div>*/}
+              </>
+            )}
+          </div>,
+        ]}
+      />
+      <Breadcrumb style={{ paddingLeft: '20px', backgroundColor: 'white' }}>
+        {breadcrumbItems}
+      </Breadcrumb>
+      {/*useLocation().pathname === '/listagem' && <MyComponent />*/}
     </div>
   );
 };

@@ -16,10 +16,13 @@
     "axios": "^0.26.0",
     "cep-promise": "^4.1.2",
     "coordenadas-do-cep": "^1.2.0",
+    "leaflet": "^1.8.0",
     "node-cep-correios": "^1.0.6",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-geolocated": "^3.2.0",
     "react-infinite-scroll-component": "^6.1.0",
+    "react-leaflet": "^4.0.0",
     "react-papaparse": "^4.0.2",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.1",
@@ -33,7 +36,7 @@
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
+    "start": "react-scripts & json-server --watch data/db.json start ",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -57,6 +60,7 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^4.0.0"
+    "gh-pages": "^4.0.0",
+    "json-server": "^0.17.0"
   }
 }

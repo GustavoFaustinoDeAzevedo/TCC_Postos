@@ -3,15 +3,20 @@ var initialState = {
   loading: true,
   isAuthenticated: false,
   mobile: false,
+  mapDrawer: false,
   getPosts: '',
   getComments: '',
   comments: '',
-
+  lat: 0,
+  lng: 0,
   user: '',
   newPost: '',
+  coord: [0, 0],
   headPrecos: [],
   tabelaPrecos: [],
+  tabelaPrecosPesquisa: [],
   mapHeight: '0px',
+
   dataSource: [
     {
       key: '1',
@@ -19,6 +24,7 @@ var initialState = {
       telefone: '(84) 55555-5555',
       email: 'gustavo@hotmail.com',
       senha: '123456',
+      votou: [],
       dba: true,
     },
     {
@@ -27,6 +33,7 @@ var initialState = {
       telefone: '(84) 55555-5555',
       email: 'jairo@hotmail.com',
       senha: '123456',
+      votou: [],
       dba: false,
     },
     {
@@ -35,6 +42,7 @@ var initialState = {
       telefone: '(84) 55555-5555',
       email: 'dmytres@hotmail.com',
       senha: '123456',
+      votou: [],
       dba: false,
     },
   ],
@@ -42,11 +50,32 @@ var initialState = {
 
 const generalReducer = function (state = initialState, action) {
   switch (action.type) {
+    case 'ACTIVE_LOAD':
+      state = {
+        ...state,
+        loading: true,
+      };
+      break;
     case 'ADD_DATA_SOURCE':
       state = {
         ...state,
         dataSource: [...state.dataSource, action.payload],
       };
+      break;
+    case 'HIDE_SHOW_DRAWER':
+      state = {
+        ...state,
+        loading: false,
+        mapDrawer: action.payload,
+      };
+      break;
+    case 'GET_COORD':
+      state = {
+        ...state,
+        loading: false,
+        coord: action.payload.split(','),
+      };
+
       break;
     case 'GET_CSV_PENDING':
       state = {
@@ -67,19 +96,21 @@ const generalReducer = function (state = initialState, action) {
         loading: false,
         headPrecos: action.payload.shift(),
         tabelaPrecos: action.payload,
+        tabelaPrecosPesquisa: action.payload,
       };
       break;
     case 'SHOW_MAP':
       state = {
         ...state,
         loading: false,
-        mapHeight: state.mobile
-          ? state.mapHeight === '0px'
-            ? '200px'
-            : '0px'
-          : state.mapHeight === '0px'
-          ? '400px'
-          : '0px',
+        mapHeight:
+          window.screen.width <= 780
+            ? state.mapHeight === '0px' || action.payload
+              ? '228px'
+              : '0px'
+            : state.mapHeight === '0px' || action.payload
+            ? '300px'
+            : '0px',
       };
       break;
     case 'LOG_IN':
@@ -101,7 +132,24 @@ const generalReducer = function (state = initialState, action) {
         ...state,
         mobile: action.payload,
       };
-      console.log(action.payload);
+      break;
+    case 'PROCURAR_POSTO':
+      state = {
+        ...state,
+        tabelaPrecosPesquisa: action.payload
+          ? state.tabelaPrecos.filter((x) => {
+              let data = action.payload.split(' ');
+              return data.every((y) => String(x).toLowerCase().includes(y));
+            })
+          : state.tabelaPrecos,
+      };
+      break;
+    case 'SET_LOCATION':
+      state = {
+        ...state,
+        latitude: action.payload[0],
+        longitude: action.payload[1],
+      };
       break;
     default:
       return state;

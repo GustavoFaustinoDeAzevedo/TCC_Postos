@@ -10,7 +10,15 @@ import {
   Spin,
 } from 'antd';
 
-import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Link,
+  Navigate,
+  Route,
+  Routes,
+  HashRouter,
+  useLocation,
+} from 'react-router-dom';
 import MyComponent from './components/GoogleMapsAPI.js';
 import {
   TableOutlined,
@@ -43,7 +51,7 @@ function Main(props) {
     const data = JSON.parse(localStorage.getItem('usuario'));
 
     console.log(data);
-    localStorage.clear();
+    //localStorage.clear();
 
     if (data) {
       props.dispatch(LogIn(data));
@@ -62,45 +70,44 @@ function Main(props) {
     );
   }, []);
   return (
-    <BrowserRouter>
-      <Home />
+    <HashRouter hashtype="noslash">
+      {/*basename={process.env.PUBLIC_URL + '/'}>*/}
+      <Layout style={{ overflow: 'hidden' }}>
+        <Home />
 
-      <Spin style={{ overflow: 'hidden' }} spinning={loading}>
-        <div
-          style={{
-            backgroundColor: 'rgba(255,255,255,1)',
-            height: '100%',
-            width: '100%',
-            overflow: 'auto',
-          }}
-        >
-          <Routes>
-            <Route path="/registrar" element={<RegistrationForm />} />
-            {isAuthenticated ? (
-              <Route
-                path="/login"
-                element={<Navigate replace to="/perfil" />}
-              ></Route>
-            ) : (
-              <Route path="/login" element={<Login />} />
-            )}
-            {!isAuthenticated ? (
-              <Route
-                path="/perfil"
-                element={<Navigate replace to="/login" />}
-              />
-            ) : (
-              <Route path="/perfil" element={<OnLogOut />} />
-            )}
-            <Route
-              path={process.env.PUBLIC_URL + '/listagem'}
-              element={<Tabela />}
-            />
-          </Routes>
-          <Divider></Divider>
-        </div>
-      </Spin>
-    </BrowserRouter>
+        <Content>
+          <Spin style={{ overflow: 'hidden' }} spinning={loading}>
+            <div
+              style={{
+                backgroundColor: 'rgba(255,255,255,1)',
+                height: '100%',
+                width: '100%',
+                overflow: 'hidden',
+              }}
+            >
+              <Routes path={process.env.PUBLIC_URL}>
+                <Route path="registrar" element={<RegistrationForm />} />
+                {isAuthenticated ? (
+                  <>
+                    {/*<Route
+                      path="login"
+                      element={<Navigate replace to="perfil" />}
+                    ></Route>*/}
+
+                    <Route path="" element={<OnLogOut />} />
+                  </>
+                ) : (
+                  <>
+                    <Route path="" element={<Login />} />
+                  </>
+                )}
+                <Route path="mapa" element={<MyComponent />} />
+              </Routes>
+            </div>
+          </Spin>
+        </Content>
+      </Layout>
+    </HashRouter>
   );
 }
 

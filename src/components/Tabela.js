@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import {
   Avatar,
   BackTop,
+  Drawer,
   Badge,
   Card,
   Collapse,
@@ -14,6 +15,10 @@ import {
   Rate,
   Space,
   Table,
+  Modal,
+  Popover,
+  Alert,
+  Tooltip,
 } from 'antd';
 import { usePapaParse } from 'react-papaparse';
 import { connect, useSelector } from 'react-redux';
@@ -21,35 +26,34 @@ import { Button, Input } from 'antd';
 
 import cep from 'cep-promise';
 import MobileTest from './MobileTest';
-import SearchInTable from './SearchFunction';
+import { EditOutlined, LikeOutlined } from '@ant-design/icons';
 import {
-  DeleteOutlined,
-  EditOutlined,
-  EllipsisOutlined,
-  FrownOutlined,
-  MehOutlined,
-  SaveOutlined,
-  SearchOutlined,
-  SettingOutlined,
-  SmileOutlined,
-} from '@ant-design/icons';
-import {
-  PrecoCombustivel,
-  DeleteDataSource,
-  EditDataSource,
-  GetEndereco,
+  GetCoord,
+  ShowMapDrawer,
+  SetLocation,
+  ShowMap,
+  ActiveLoadting,
 } from '../actions/generalActions';
 import Text from 'antd/lib/typography/Text';
 import CollapsePanel from 'antd/lib/collapse/CollapsePanel';
+import { useMap } from 'react-leaflet';
 
 function Tabela(props) {
   const { readRemoteFile } = usePapaParse();
-  const { tabelaPrecos, headPrecos, loading, user, mobile } = useSelector(
-    (state) => state.general
-  );
+  const {
+    isAuthenticated,
+    tabelaPrecos,
+    tabelaPrecosPesquisa,
+    headPrecos,
+    loading,
+    user,
+    mobile,
+    coord,
+  } = useSelector((state) => state.general);
   const [edit, setEdit] = useState(null);
-  const [tempData, setTempData] = useState();
+  const [tempData, setTempData] = useState([]);
   const [data, setData] = useState([]);
+  const [visible, setVisible] = useState(false);
   const SearchInTable = (setSelectedKeys, selectedKeys, confirm) => {
     return (
       <>
@@ -73,18 +77,20 @@ function Tabela(props) {
       </>
     );
   };
-
+  useEffect(() => {
+    props.dispatch(ActiveLoadting());
+  }, []);
   return (
     <>
       <BackTop />
-      <div style={{ overflow: 'auto', padding: '10px', background: '#ececec' }}>
+      <div style={{ overflow: 'hidden', background: '#ececec' }}>
         <List
           grid={{
             gutter: 16,
             xs: 1,
             sm: 1,
-            md: 2,
-            lg: 2,
+            md: 1,
+            lg: 1,
             xl: 2,
             xxl: 2,
           }}
@@ -93,100 +99,140 @@ function Tabela(props) {
             pageSizeOptions: ['10', '20', '40', '80'],
             position: 'both',
           }}
-          dataSource={tabelaPrecos}
+          dataSource={tabelaPrecosPesquisa}
           renderItem={(data) => (
-            <List.Item style={{ paddingTop: '30px' }}>
-              <Badge count={'0km'} color={'blue'} offset={[-100, 125]}>
-                <Card
-                  bordered={false}
-                  title={data[3]}
-                  key={data[4]}
-                  actions={[
-                    <SettingOutlined key="setting" />,
-                    <EditOutlined key="edit" />,
-                    <EllipsisOutlined key="ellipsis" />,
-                  ]}
-                  style={{
-                    background: '#bdbdbd',
-                    border: '4px solid black',
-                    borderRadius: '10px',
-                  }}
-                >
-                  <Card
-                    hoverable={false}
-                    style={{
-                      borderRadius: '10px 10px 0px 0',
-
-                      width: '100%',
+            <List.Item style={{ paddingTop: '35px' }}>
+              <Card
+                hoverable={true}
+                bordered={false}
+                title={data[0]}
+                key={data[0]}
+                //actions={[
+                // {
+                /*
+                  <div>
+                    <EditOutlined
+                      style={{ fontSize: '20px', width: '100%' }}
+                      onClick={() => {
+                        if (isAuthenticated) {
+                          setTempData(data);
+                          setVisible(true);
+                        } else {
+                          alert('Precisa autenticar para editar o posto!');
+                        }
+                      }}
+                      key={'edit' + data[6]}
+                    />
+                  </div>,
+                    */
+                //  },
+                // ]}
+                style={{
+                  background: '#bdbdbd',
+                  border: '4px solid black',
+                  borderRadius: '10px',
+                }}
+              >
+                <div style={{ paddingBottom: '10px' }}>
+                  <Button
+                    onClick={() => {
+                      props.dispatch(GetCoord(data[6]));
+                      props.dispatch(ShowMapDrawer(false));
                     }}
                   >
-                    {data[5]}
-                  </Card>
+                    Localizar no mapa
+                  </Button>
+                </div>
+                <Card
+                  hoverable={false}
+                  style={{
+                    borderRadius: '10px 10px 0px 0',
+                    fontFamily: 'Lucida Console',
+                    width: '100%',
+                  }}
+                >
+                  <Text type="secondary">
+                    {data[1]} - {data[2]}, {data[4]} - {data[5]}
+                  </Text>
+                  <br />
+                  <Text type="secondary">
+                    Distância: {' ' + Math.floor(Math.random() * 100)}km
+                  </Text>
+                  <br />
+                  <Text type="secondary">
+                    Atualizado: {'há ' + Math.floor(Math.random() * 96)}h
+                  </Text>
+                </Card>
 
-                  <Card
-                    hoverable={false}
+                <Card
+                  hoverable={false}
+                  style={{
+                    borderRadius: '0px 0px 10px 10px',
+                    fontFamily: 'Lucida Console',
+                    textAlign: 'left',
+                    width: '100%',
+                  }}
+                >
+                  <Avatar
+                    src={process.env.PUBLIC_URL + '/rating-2797.png'}
+                    shape="square"
+                    size={window.screen.width > 780 ? 'large' : 'small'}
+                  />
+
+                  <Rate
+                    disabled={!isAuthenticated}
+                    defaultValue={1 + Math.random() * 4}
                     style={{
-                      borderRadius: '0px 0px 10px 10px',
+                      paddingLeft: window.screen.width < 780 ? '10px' : '20px',
+                    }}
+                  />
+                  <Text type="secondary">
+                    ({Math.floor(Math.random() * 1000)})
+                  </Text>
+                </Card>
+                {/*
+                <Collapse bordered={false} ghost defaultActiveKey={['1']}>
+                  <CollapsePanel
+                    header={
+                      <>
+                        <img
+                          alt={'ALT'}
+                          style={{
+                            //paddingLeft: '25px',
+                            width: '10%',
+                            height: '10%',
+                          }}
+                          src={
+                            process.env.PUBLIC_URL + '/bomba-de-gasolina.png'
+                          }
+                        />
+                        <Text
+                          type="secondary"
+                          style={{
+                            paddingLeft: '15px',
+                          }}
+                        >
+                          Mostrar Preços
+                        </Text>
+                      </>
+                    }
+                    style={{
+                      background: '#bdbdbd',
                       fontFamily: 'Lucida Console',
                       textAlign: 'left',
                       width: '100%',
                     }}
+                    key={headPrecos[5]}
                   >
-                    <Avatar shape="square" size="large" />
-                    <Rate
-                      defaultValue={0}
-                      style={{
-                        paddingLeft: '20px',
-                      }}
-                      allowHalf
-                    />
-                    <Text type="secondary"> (0)</Text>
-                  </Card>
-                  <Collapse bordered={false} ghost defaultActiveKey={['1']}>
-                    <CollapsePanel
-                      header={
-                        <>
-                          <img
-                            alt={'ALT'}
-                            style={{
-                              //paddingLeft: '25px',
-                              width: '10%',
-                              height: '10%',
-                            }}
-                            src={'/bomba-de-gasolina.png'}
-                          />
-                          <Text
-                            type="secondary"
-                            style={{
-                              paddingLeft: '15px',
-                            }}
-                          >
-                            Mostrar Preços
-                          </Text>
-                        </>
-                      }
-                      style={{
-                        background: '#bdbdbd',
-                        fontFamily: 'Lucida Console',
-                        textAlign: 'left',
-                        width: '100%',
-                      }}
-                      key={headPrecos[5]}
-                    >
-                      <Card.Grid
-                        hoverable={false}
-                        style={{
-                          borderRadius: '10px 0px 0px 10px',
-                          background: 'green',
-                          fontFamily: 'Lucida Console',
-                          width: '60%',
-                        }}
-                      >
-                        <div
+                    {window.screen.width > 780 && (
+                      <div>
+                        <Card.Grid
+                          hoverable={false}
                           style={{
+                            borderRadius: '10px 0px 0px 10px',
                             background: 'green',
-                            padding: '10px',
-                            border: '2px solid white',
+                            fontFamily: 'Lucida Console',
+                            width: '60%',
                           }}
                         >
                           <div
@@ -204,14 +250,7 @@ function Tabela(props) {
                               Diesel
                             </span>
                           </div>
-                        </div>
-                        <div
-                          style={{
-                            background: 'green',
-                            padding: '10px',
-                            border: '2px solid white',
-                          }}
-                        >
+
                           <div
                             style={{
                               border: '2px solid white',
@@ -227,14 +266,7 @@ function Tabela(props) {
                               Etanol
                             </span>
                           </div>
-                        </div>
-                        <div
-                          style={{
-                            background: 'green',
-                            padding: '10px',
-                            border: '2px solid white',
-                          }}
-                        >
+
                           <div
                             style={{
                               border: '2px solid white',
@@ -250,14 +282,7 @@ function Tabela(props) {
                               Gasolina
                             </span>
                           </div>
-                        </div>
-                        <div
-                          style={{
-                            background: 'green',
-                            padding: '10px',
-                            border: '2px solid white',
-                          }}
-                        >
+
                           <div
                             style={{
                               border: '2px solid white',
@@ -277,14 +302,7 @@ function Tabela(props) {
                               Gasolina Aditivada
                             </span>
                           </div>
-                        </div>
-                        <div
-                          style={{
-                            background: 'green',
-                            padding: '10px',
-                            border: '2px solid white',
-                          }}
-                        >
+
                           <div
                             style={{
                               border: '2px solid white',
@@ -304,125 +322,272 @@ function Tabela(props) {
                               Gasolina Aditivada Premium
                             </span>
                           </div>
-                        </div>
-                      </Card.Grid>
+                        </Card.Grid>
 
-                      <Card.Grid
-                        hoverable={false}
+                        <Card.Grid
+                          hoverable={false}
+                          style={{
+                            borderRadius: '0px 10px 10px 0px',
+                            background: 'green',
+                            fontFamily: 'Lucida Console',
+                            width: '40%',
+                          }}
+                        >
+                          <div
+                            style={{
+                              overflow: ' hidden',
+                              fontSize: '2em',
+                              border: '2px solid white',
+                              padding: '10px 5px',
+                              color: 'white',
+                              backgroundColor: 'green',
+                            }}
+                          >
+                            {6 + Math.random().toFixed(2) / 10}
+                            &nbsp;&nbsp;
+                            <Rate
+                              onChange={() => {
+                                if (isAuthenticated) {
+                                } else {
+                                  alert(
+                                    'Precisa autenticar para fazer esta ação!'
+                                  );
+                                }
+                              }}
+                              character={<LikeOutlined />}
+                              defaultValue={0}
+                              count={1}
+                            />
+                          </div>
+
+                          <div
+                            style={{
+                              overflow: ' hidden',
+                              fontSize: '2em',
+                              border: '2px solid white',
+                              padding: '10px 5px',
+                              color: 'white',
+                              backgroundColor: 'green',
+                            }}
+                          >
+                            {6 + Math.random().toFixed(2) / 10}
+                            &nbsp;&nbsp;
+                            <Rate
+                              onChange={() => {
+                                if (isAuthenticated) {
+                                } else {
+                                  alert(
+                                    'Precisa autenticar para fazer esta ação!'
+                                  );
+                                }
+                              }}
+                              character={<LikeOutlined />}
+                              defaultValue={0}
+                              count={1}
+                            />
+                          </div>
+
+                          <div
+                            style={{
+                              overflow: ' hidden',
+                              fontSize: '2em',
+                              border: '2px solid white',
+                              padding: '10px 5px',
+                              color: 'white',
+                              backgroundColor: 'green',
+                            }}
+                          >
+                            {7 + Math.random().toFixed(2) / 10}
+                            &nbsp;&nbsp;
+                            <Rate
+                              onChange={() => {
+                                if (isAuthenticated) {
+                                } else {
+                                  alert(
+                                    'Precisa autenticar para fazer esta ação!'
+                                  );
+                                }
+                              }}
+                              character={<LikeOutlined />}
+                              defaultValue={0}
+                              count={1}
+                            />
+                          </div>
+
+                          <div
+                            style={{
+                              overflow: ' hidden',
+                              fontSize: '2em',
+                              border: '2px solid white',
+                              padding: '10px 5px',
+                              color: 'white',
+                              backgroundColor: 'green',
+                            }}
+                          >
+                            {7 + Math.random().toFixed(2) / 10}
+                            &nbsp;&nbsp;
+                            <Rate
+                              onChange={() => {
+                                if (isAuthenticated) {
+                                } else {
+                                  alert(
+                                    'Precisa autenticar para fazer esta ação!'
+                                  );
+                                }
+                              }}
+                              character={<LikeOutlined />}
+                              defaultValue={0}
+                              count={1}
+                            />
+                          </div>
+
+                          <div
+                            style={{
+                              overflow: ' hidden',
+                              fontSize: '2em',
+                              border: '2px solid white',
+                              padding: '10px 5px',
+                              color: 'white',
+                              backgroundColor: 'green',
+                            }}
+                          >
+                            {7 + Math.random().toFixed(2) / 10}
+                            &nbsp;&nbsp;
+                            <Rate
+                              onChange={() => {
+                                if (isAuthenticated) {
+                                } else {
+                                  alert(
+                                    'Precisa autenticar para fazer esta ação!'
+                                  );
+                                }
+                              }}
+                              character={<LikeOutlined />}
+                              defaultValue={0}
+                              count={1}
+                            />
+                          </div>
+                        </Card.Grid>
+                      </div>
+                    )}
+                    {window.screen.width < 780 && (
+                      <Card
                         style={{
-                          borderRadius: '0px 10px 10px 0px',
-                          background: 'green',
-                          fontFamily: 'Lucida Console',
-                          width: '40%',
+                          margin: '-13px',
+
+                          backgroundColor: 'green',
+                          color: 'white',
+                          borderRadius: '10px',
+                          lineHeight: '100%',
+                          fontSize: '0.75em',
                         }}
                       >
-                        <div
-                          style={{
-                            background: 'green',
-                            padding: '10px',
-                            border: '2px solid white',
-                          }}
-                        >
-                          <div
-                            style={{
-                              overflow: 'auto',
-                              fontSize: '2em',
-                              border: '2px solid white',
-                              padding: '10px 5px',
-                              color: 'white',
-                              backgroundColor: 'green',
-                            }}
-                          >
-                            0,000
+                        <div>
+                          <div>
+                            <span>
+                              Diesel:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              {(6 + Math.random()).toFixed(3)}
+                              &nbsp;&nbsp;
+                              <Rate
+                                onChange={() => {
+                                  if (isAuthenticated) {
+                                  } else {
+                                    alert(
+                                      'Precisa autenticar para fazer esta ação!'
+                                    );
+                                  }
+                                }}
+                                character={<LikeOutlined />}
+                                defaultValue={0}
+                                count={1}
+                              />
+                            </span>
                           </div>
-                        </div>
-                        <div
-                          style={{
-                            background: 'green',
-                            padding: '10px',
-                            border: '2px solid white',
-                          }}
-                        >
-                          <div
-                            style={{
-                              overflow: 'auto',
-                              fontSize: '2em',
-                              border: '2px solid white',
-                              padding: '10px 5px',
-                              color: 'white',
-                              backgroundColor: 'green',
-                            }}
-                          >
-                            0,000
+                          <br />
+                          <div>
+                            Etanol: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            {(6 + Math.random()).toFixed(3)}
+                            &nbsp;&nbsp;
+                            <Rate
+                              onChange={() => {
+                                if (isAuthenticated) {
+                                } else {
+                                  alert(
+                                    'Precisa autenticar para fazer esta ação!'
+                                  );
+                                }
+                              }}
+                              character={<LikeOutlined />}
+                              defaultValue={0}
+                              count={1}
+                            />
                           </div>
-                        </div>
-
-                        <div
-                          style={{
-                            background: 'green',
-                            padding: '10px',
-                            border: '2px solid white',
-                          }}
-                        >
-                          <div
-                            style={{
-                              overflow: 'auto',
-                              fontSize: '2em',
-                              border: '2px solid white',
-                              padding: '10px 5px',
-                              color: 'white',
-                              backgroundColor: 'green',
-                            }}
-                          >
-                            0,000
+                          <br />
+                          <div>
+                            Gasolina: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            {(7 + Math.random()).toFixed(3)}
+                            &nbsp;&nbsp;
+                            <Rate
+                              onChange={() => {
+                                if (isAuthenticated) {
+                                } else {
+                                  alert(
+                                    'Precisa autenticar para fazer esta ação!'
+                                  );
+                                }
+                              }}
+                              character={<LikeOutlined />}
+                              defaultValue={0}
+                              count={1}
+                            />
                           </div>
-                        </div>
-                        <div
-                          style={{
-                            background: 'green',
-                            padding: '10px',
-                            border: '2px solid white',
-                          }}
-                        >
-                          <div
-                            style={{
-                              overflow: 'auto',
-                              fontSize: '2em',
-                              border: '2px solid white',
-                              padding: '10px 5px',
-                              color: 'white',
-                              backgroundColor: 'green',
-                            }}
-                          >
-                            {' '}
-                            0,000
+                          <br />
+                          <div>
+                            G. Aditiv: &nbsp;&nbsp;&nbsp;&nbsp;
+                            {(7 + Math.random()).toFixed(3)}
+                            &nbsp;&nbsp;
+                            <Rate
+                              onChange={() => {
+                                if (isAuthenticated) {
+                                } else {
+                                  alert(
+                                    'Precisa autenticar para fazer esta ação!'
+                                  );
+                                }
+                              }}
+                              character={<LikeOutlined />}
+                              defaultValue={0}
+                              count={1}
+                            />
                           </div>
+                          <br />
+                          <span>
+                            <div>
+                              G. A. Premium:&nbsp;
+                              {(7 + Math.random()).toFixed(3)}
+                              &nbsp;&nbsp;
+                              <Rate
+                                onChange={() => {
+                                  if (isAuthenticated) {
+                                  } else {
+                                    alert(
+                                      'Precisa autenticar para fazer esta ação!'
+                                    );
+                                  }
+                                }}
+                                character={<LikeOutlined />}
+                                defaultValue={0}
+                                count={1}
+                              />
+                            </div>
+                          </span>
                         </div>
-                        <div
-                          style={{
-                            background: 'green',
-                            padding: '10px',
-                            border: '2px solid white',
-                          }}
-                        >
-                          <div
-                            style={{
-                              overflow: 'auto',
-                              fontSize: '2em',
-                              border: '2px solid white',
-                              padding: '10px 5px',
-                              color: 'white',
-                              backgroundColor: 'green',
-                            }}
-                          >
-                            0,000
-                          </div>
-                        </div>
-                      </Card.Grid>
-                    </CollapsePanel>
-                  </Collapse>
-                </Card>
-              </Badge>
+                      </Card>
+                    )}
+                  </CollapsePanel>
+                </Collapse>
+                              */}
+              </Card>
             </List.Item>
           )}
         />
@@ -500,6 +665,45 @@ function Tabela(props) {
           
         </Table>*/}
       </div>
+      <Modal
+        title={'Configurações do ' + tempData[0]}
+        onCancel={() => setVisible(false)}
+        onOk={() => setVisible(false)}
+        footer={[
+          <Button key="back" onClick={() => setVisible(false)}>
+            Cancelar
+          </Button>,
+          <Button key="submit" type="primary" onClick={() => setVisible(false)}>
+            Enviar
+          </Button>,
+        ]}
+        visible={visible}
+      >
+        <div style={{ fontWeight: 'bold' }}>
+          Endereço:
+          <Input defaultValue={tempData[1]} />
+          Preços:
+          <div style={{ paddingLeft: '30px' }}>
+            Diesel:
+            <Input defaultValue={''} />
+            Etanol:
+            <Input defaultValue={''} />
+            Gasolina Comum:
+            <Input defaultValue={''} />
+            Gasolina Aditivada:
+            <Input defaultValue={''} />
+            Gasolina Aditivada Premium:
+            <Input defaultValue={''} />
+          </div>
+        </div>
+        <div style={{ paddingTop: '25px' }}>
+          <Text type="secondary">
+            OBS: O que você enviar será analisado manualmente para que possa ser
+            atualizado, você só pode enviar uma vez por dia por posto.
+          </Text>
+        </div>
+      </Modal>
+      ,
     </>
   );
 }
