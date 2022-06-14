@@ -1,6 +1,7 @@
 import { message } from 'antd';
 var initialState = {
   loading: true,
+  loadingMap: true,
   isAuthenticated: false,
   mobile: false,
   mapDrawer: false,
@@ -13,7 +14,7 @@ var initialState = {
   newPost: '',
   coord: [0, 0],
   headPrecos: [],
-  tabelaPrecos: [],
+  tabelaPrecos: [{ COORDENADAS: [0, 0] }],
   tabelaPrecosPesquisa: [],
   mapHeight: '0px',
 
@@ -80,23 +81,23 @@ const generalReducer = function (state = initialState, action) {
     case 'GET_CSV_PENDING':
       state = {
         ...state,
-        loading: true,
+        loadingMap: true,
       };
       break;
     case 'GET_CSV_REJECTED':
       state = {
         ...state,
-        loading: false,
+        loadingMap: false,
       };
       message.error(action.payload.message);
       break;
-    case 'GET_CSV':
+    case 'GET_CSV_FULFILLED':
       state = {
         ...state,
-        loading: false,
-        headPrecos: action.payload.shift(),
-        tabelaPrecos: action.payload,
-        tabelaPrecosPesquisa: action.payload,
+        loadingMap: false,
+        headPrecos: action.payload.data.shift(),
+        tabelaPrecos: action.payload.data,
+        tabelaPrecosPesquisa: action.payload.data,
       };
       break;
     case 'SHOW_MAP':

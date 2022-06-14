@@ -91,7 +91,9 @@ export const PrecoCombustivel = function (data) {
   return function (dispatch) {
     dispatch({
       type: 'GET_CSV',
-      payload: data,
+      payload: axios.get(
+        'https://my-json-server.typicode.com/Gustavo195/TCC_Postos/postos'
+      ),
     });
   };
 };

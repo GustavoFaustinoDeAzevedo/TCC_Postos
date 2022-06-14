@@ -63,9 +63,7 @@ function Main(props) {
     readRemoteFile(
       process.env.PUBLIC_URL + '/cadastro_revendas_glp-1-corrigido-2.csv',
       {
-        complete: (results) => {
-          props.dispatch(PrecoCombustivel(results.data));
-        },
+        complete: (results) => {},
       }
     );
   }, []);

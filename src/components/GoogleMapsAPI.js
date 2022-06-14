@@ -101,7 +101,7 @@ function MyComponent(props) {
     mapDrawer,
     isAuthenticated,
     coord,
-    loading,
+    loadingMap,
     tabelaPrecosPesquisa,
     tabelaPrecos,
   } = useSelector((state) => state.general);
@@ -109,8 +109,6 @@ function MyComponent(props) {
 
   //const [localCoord,SetLocalCoord] = useEffect(position);
   useEffect(() => {
-    props.dispatch(ActiveLoadting());
-
     navigator.geolocation.getCurrentPosition((position) => {
       setLocalCoord({
         lat: position.coords.latitude,
@@ -137,110 +135,138 @@ function MyComponent(props) {
     return null;
   }
   const map = (
-    <div
-      style={{
-        position: 'relative',
-        minHeight: window.screen.width < 780 ? '60vh' : '80vh',
-        width: '100%',
-      }}
-    >
-      <Drawer
-        title="Resultado"
-        placement="top"
-        height={window.screen.width < 780 ? '60vh' : '80vh'}
-        getContainer={false}
+    <Spin spinning={loadingMap}>
+      <div
         style={{
-          position: 'absolute',
-        }}
-        onClose={() => {
-          props.dispatch(ShowMapDrawer(false));
-        }}
-        visible={mapDrawer}
-      >
-        <Tabela />
-      </Drawer>
-
-      <MapContainer
-        dragging={true}
-        center={localCoord}
-        zoom={15}
-        zoomControl={false}
-        scrollWheelZoom={true}
-        style={{
-          minHeight: window.screen.width < 780 ? '69vh' : '86vh',
+          position: 'relative',
+          minHeight: window.screen.width < 780 ? '60vh' : '80vh',
           width: '100%',
         }}
-        ref={mapRef}
       >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {!mapDrawer && (
-          <>
-            <div style={{ height: '100%', width: '100%' }}>
-              <Button
-                tootip="Mostrar Seu Local"
-                icon={<SendOutlined />}
-                onClick={() => {
-                  navigator.geolocation.getCurrentPosition((position) => {
-                    setLocalCoord({
-                      lat: position.coords.latitude,
-                      lng: position.coords.longitude,
+        <Drawer
+          title="Resultado"
+          placement="top"
+          height={window.screen.width < 780 ? '60vh' : '80vh'}
+          getContainer={false}
+          style={{
+            position: 'absolute',
+          }}
+          onClose={() => {
+            props.dispatch(ShowMapDrawer(false));
+          }}
+          visible={mapDrawer}
+        >
+          <Tabela />
+        </Drawer>
+
+        <MapContainer
+          dragging={true}
+          center={localCoord}
+          zoom={15}
+          zoomControl={false}
+          scrollWheelZoom={true}
+          style={{
+            minHeight: window.screen.width < 780 ? '69vh' : '86vh',
+            width: '100%',
+          }}
+          ref={mapRef}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {!mapDrawer && (
+            <>
+              <div style={{ height: '100%', width: '100%' }}>
+                <Button
+                  tootip="Mostrar Seu Local"
+                  icon={<SendOutlined />}
+                  onClick={() => {
+                    navigator.geolocation.getCurrentPosition((position) => {
+                      setLocalCoord({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                      });
+                      props.dispatch(
+                        GetCoord(
+                          [
+                            position.coords.latitude,
+                            position.coords.longitude,
+                          ].toString()
+                        )
+                      );
                     });
-                    props.dispatch(
-                      GetCoord(
-                        [
-                          position.coords.latitude,
-                          position.coords.longitude,
-                        ].toString()
-                      )
-                    );
-                  });
-                }}
-                style={{
-                  top: window.screen.width < 780 ? '67%' : '83%',
-                  left: '10px',
-                  position: 'absolute',
-                  zIndex: '1000',
-                }}
+                  }}
+                  style={{
+                    top: window.screen.width < 780 ? '67%' : '83%',
+                    left: '10px',
+                    position: 'absolute',
+                    zIndex: '1000',
+                  }}
+                />
+              </div>
+              <ZoomControl
+                position="bottomleft"
+                zoomInText="+"
+                zoomOutText="-"
               />
-            </div>
-            <ZoomControl position="bottomleft" zoomInText="+" zoomOutText="-" />
-          </>
-        )}
-        <List
-          dataSource={tabelaPrecos}
-          renderItem={(data) => (
-            <List.Item style={{ paddingTop: '35px' }}>
-              <Marker
-                eventHandlers={{
-                  click: (e) => handleClick(),
-                }}
-                position={data[6].split(',')}
-              >
-                <Popup>
-                  {data[0]} <br /> {data[1]}
-                  <br /> {data[2]}
-                  <br />
-                  <Rate
-                    disabled={!isAuthenticated}
-                    defaultValue={1 + Math.random() * 4}
-                  />
-                  <br />
-                  <Card
-                    style={{
-                      backgroundColor: '#52c41a',
-                      color: 'white',
-                      borderRadius: '10px',
-                      lineHeight: '100%',
-                      fontSize: '0.75em',
-                    }}
-                  >
-                    <div>
+            </>
+          )}
+          <List
+            dataSource={tabelaPrecos}
+            renderItem={(data) => (
+              <List.Item style={{ paddingTop: '35px' }}>
+                {console.log(data)}
+                <Marker
+                  eventHandlers={{
+                    click: (e) => handleClick(),
+                  }}
+                  position={data.COORDENADAS}
+                >
+                  <Popup>
+                    {data[0]} <br /> {data[1]}
+                    <br /> {data[2]}
+                    <br />
+                    <Rate
+                      disabled={!isAuthenticated}
+                      defaultValue={1 + Math.random() * 4}
+                    />
+                    <br />
+                    <Card
+                      style={{
+                        backgroundColor: '#52c41a',
+                        color: 'white',
+                        borderRadius: '10px',
+                        lineHeight: '100%',
+                        fontSize: '0.75em',
+                      }}
+                    >
                       <div>
-                        <span>
-                          Diesel:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <div>
+                          <span>
+                            Diesel:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            {(6 + Math.random()).toFixed(3)}
+                            &nbsp;&nbsp;&nbsp;
+                            <Rate
+                              disabled={!isAuthenticated}
+                              onChange={() => {
+                                if (isAuthenticated) {
+                                } else {
+                                  alert(
+                                    'Precisa autenticar para fazer esta ação!'
+                                  );
+                                }
+                              }}
+                              character={<LikeOutlined />}
+                              defaultValue={0}
+                              count={1}
+                            />
+                          </span>
+                        </div>
+                        <br />
+                        <div>
+                          Etanol:
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                           {(6 + Math.random()).toFixed(3)}
                           &nbsp;&nbsp;&nbsp;
                           <Rate
@@ -257,68 +283,11 @@ function MyComponent(props) {
                             defaultValue={0}
                             count={1}
                           />
-                        </span>
-                      </div>
-                      <br />
-                      <div>
-                        Etanol:
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {(6 + Math.random()).toFixed(3)}
-                        &nbsp;&nbsp;&nbsp;
-                        <Rate
-                          disabled={!isAuthenticated}
-                          onChange={() => {
-                            if (isAuthenticated) {
-                            } else {
-                              alert('Precisa autenticar para fazer esta ação!');
-                            }
-                          }}
-                          character={<LikeOutlined />}
-                          defaultValue={0}
-                          count={1}
-                        />
-                      </div>
-                      <br />
-                      <div>
-                        Gasolina:
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {(7 + Math.random()).toFixed(3)}
-                        &nbsp;&nbsp;&nbsp;
-                        <Rate
-                          disabled={!isAuthenticated}
-                          onChange={() => {
-                            if (isAuthenticated) {
-                            } else {
-                              alert('Precisa autenticar para fazer esta ação!');
-                            }
-                          }}
-                          character={<LikeOutlined />}
-                          defaultValue={0}
-                          count={1}
-                        />
-                      </div>
-                      <br />
-                      <div>
-                        G. Aditivada: &nbsp;&nbsp;&nbsp;&nbsp;
-                        {(7 + Math.random()).toFixed(3)}
-                        &nbsp;&nbsp;&nbsp;
-                        <Rate
-                          disabled={!isAuthenticated}
-                          onChange={() => {
-                            if (isAuthenticated) {
-                            } else {
-                              alert('Precisa autenticar para fazer esta ação!');
-                            }
-                          }}
-                          character={<LikeOutlined />}
-                          defaultValue={0}
-                          count={1}
-                        />
-                      </div>
-                      <br />
-                      <span>
+                        </div>
+                        <br />
                         <div>
-                          G. A. Premium:&nbsp;
+                          Gasolina:
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                           {(7 + Math.random()).toFixed(3)}
                           &nbsp;&nbsp;&nbsp;
                           <Rate
@@ -336,20 +305,62 @@ function MyComponent(props) {
                             count={1}
                           />
                         </div>
-                      </span>
-                    </div>
-                  </Card>
-                </Popup>
-                <Tooltip direction="auto" offset={[-8, -2]} opacity={3}>
-                  <span>{data[0]}</span>
-                </Tooltip>
-              </Marker>
-            </List.Item>
-          )}
-        />
-        <ChangeMapView />
-      </MapContainer>
-    </div>
+                        <br />
+                        <div>
+                          G. Aditivada: &nbsp;&nbsp;&nbsp;&nbsp;
+                          {(7 + Math.random()).toFixed(3)}
+                          &nbsp;&nbsp;&nbsp;
+                          <Rate
+                            disabled={!isAuthenticated}
+                            onChange={() => {
+                              if (isAuthenticated) {
+                              } else {
+                                alert(
+                                  'Precisa autenticar para fazer esta ação!'
+                                );
+                              }
+                            }}
+                            character={<LikeOutlined />}
+                            defaultValue={0}
+                            count={1}
+                          />
+                        </div>
+                        <br />
+                        <span>
+                          <div>
+                            G. A. Premium:&nbsp;
+                            {(7 + Math.random()).toFixed(3)}
+                            &nbsp;&nbsp;&nbsp;
+                            <Rate
+                              disabled={!isAuthenticated}
+                              onChange={() => {
+                                if (isAuthenticated) {
+                                } else {
+                                  alert(
+                                    'Precisa autenticar para fazer esta ação!'
+                                  );
+                                }
+                              }}
+                              character={<LikeOutlined />}
+                              defaultValue={0}
+                              count={1}
+                            />
+                          </div>
+                        </span>
+                      </div>
+                    </Card>
+                  </Popup>
+                  <Tooltip direction="auto" offset={[-8, -2]} opacity={3}>
+                    <span>{data[0]}</span>
+                  </Tooltip>
+                </Marker>
+              </List.Item>
+            )}
+          />
+          <ChangeMapView />
+        </MapContainer>
+      </div>
+    </Spin>
   );
   return <div>{map}</div>;
 }
