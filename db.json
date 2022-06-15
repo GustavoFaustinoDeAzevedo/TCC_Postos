@@ -1,6 +1,7 @@
 {
   "postos": [
     {
+      "ID": 1,
       "NOMEFANTASIA": "Posto Premier",
       "ENDERECO": "Av. Sen. Salgado Filho, 1552",
       "BAIRRO": "Tirol",
@@ -15,6 +16,7 @@
       "DATAATUALIZACAO": "1655242978676"
     },
     {
+      "ID": 2,
       "NOMEFANTASIA": "Posto Cidade Natal",
       "ENDERECO": "Av. Sen. Salgado Filho, 2102",
       "BAIRRO": "Lagoa Nova",
@@ -22,13 +24,14 @@
       "MUNICIPIO": "Natal",
       "UF": "RN",
       "COORDENADAS": "-5.815061323507136, -35.206155926941804",
-      "NVOTOS": "287",
-      "RANK": "4.3",
+      "NVOTOS": 287,
+      "RANK": 4.3,
       "PRECOS": "7.190,6.058,7.230,7.357,",
       "RANKPRECOS": "2,2,2,2,2",
       "DATAATUALIZACAO": "1655242978676"
     },
     {
+      "ID": 3,
       "NOMEFANTASIA": "Posto Monte Belo - Romualdo",
       "ENDERECO": "Av. Romualdo Galvão, 1954",
       "BAIRRO": "Lagoa Nova",
@@ -36,13 +39,14 @@
       "MUNICIPIO": "Natal",
       "UF": "RN",
       "COORDENADAS": "-5.811927723146007, -35.208301553553106",
-      "NVOTOS": "1",
-      "RANK": "5",
+      "NVOTOS": 1,
+      "RANK": 5,
       "PRECOS": "7.190,6.058,7.230,7.357,",
       "RANKPRECOS": "2,2,2,2,2",
       "DATAATUALIZACAO": "1655242978676"
     },
     {
+      "ID": 4,
       "NOMEFANTASIA": "Posto Amigo - Salgado Filho",
       "ENDERECO": "Av. Sen. Salgado Filho, 2840",
       "BAIRRO": "Lagoa Nova",
@@ -50,13 +54,14 @@
       "MUNICIPIO": "Natal",
       "UF": "RN",
       "COORDENADAS": "-5.823616768173716, -35.20891700902441",
-      "NVOTOS": "52",
-      "RANK": "4.4",
+      "NVOTOS": 52,
+      "RANK": 4.4,
       "PRECOS": "7.190,6.058,7.230,7.357,",
       "RANKPRECOS": "2,2,2,2,2",
       "DATAATUALIZACAO": "1655242978676"
     },
     {
+      "ID": 5,
       "NOMEFANTASIA": "Postos dos Anjos",
       "ENDERECO": "Av. dos Xavantes, 2001",
       "BAIRRO": "Pitimbú",
@@ -64,13 +69,14 @@
       "MUNICIPIO": "Natal",
       "UF": "RN",
       "COORDENADAS": "-5.86589084965274, -35.22617744294625",
-      "NVOTOS": "5",
-      "RANK": "3.6",
+      "NVOTOS": 5,
+      "RANK": 3.6,
       "PRECOS": "7.190,6.058,7.230,7.357,",
       "RANKPRECOS": "2,2,2,2,2",
       "DATAATUALIZACAO": "1655242978676"
     },
     {
+      "ID": 6,
       "NOMEFANTASIA": "Zumba Petróleo",
       "ENDERECO": "Av. Dr. João Medeiros Filho, 975",
       "BAIRRO": "Igapó",
@@ -78,13 +84,14 @@
       "MUNICIPIO": "Natal",
       "UF": "RN",
       "COORDENADAS": "-5.76260409332525, -35.25214100947361",
-      "NVOTOS": "94",
-      "RANK": "4.1",
+      "NVOTOS": 94,
+      "RANK": 4.1,
       "PRECOS": "7.190,6.058,7.230,7.357,",
       "RANKPRECOS": "2,2,2,2,2",
       "DATAATUALIZACAO": "1655242978676"
     },
     {
+      "ID": 7,
       "NOMEFANTASIA": "Posto Carrefour Posto Natal Zona Norte",
       "ENDERECO": "Av. Dr. João Medeiros Filho, 2005",
       "BAIRRO": "Potengi",
@@ -92,13 +99,14 @@
       "MUNICIPIO": "Natal",
       "UF": "RN",
       "COORDENADAS": "-5.75945233907403, -35.247539269429545",
-      "NVOTOS": "1874",
-      "RANK": "4.2",
+      "NVOTOS": 1874,
+      "RANK": 4.2,
       "PRECOS": "7.190,6.058,7.230,7.357,",
       "RANKPRECOS": "2,2,2,2,2",
       "DATAATUALIZACAO": "1655242978676"
     },
     {
+      "ID": 8,
       "NOMEFANTASIA": "Auto Posto Esmeraldo-24 Horas",
       "ENDERECO": "Av. Engenheiro Roberto Freire, 1608",
       "BAIRRO": "Capim Macio",
@@ -106,13 +114,14 @@
       "MUNICIPIO": "Natal",
       "UF": "RN",
       "COORDENADAS": "-5.862799971218557, -35.190016715342075",
-      "NVOTOS": "44",
-      "RANK": "4.4",
+      "NVOTOS": 44,
+      "RANK": 4.4,
       "PRECOS": "7.190,6.058,7.230,7.357,",
       "RANKPRECOS": "2,2,2,2,2",
       "DATAATUALIZACAO": "1655242978676"
     },
     {
+      "ID": 9,
       "NOMEFANTASIA": "Cirne Postos - Petrópolis",
       "ENDERECO": "R. Gen. Gustavo Cordeiro de Faria, 383",
       "BAIRRO": "Petrópolis",
@@ -120,13 +129,14 @@
       "MUNICIPIO": "Natal",
       "UF": "RN",
       "COORDENADAS": "-5.78050355417864, -35.19869901564033",
-      "NVOTOS": "122",
-      "RANK": "4.4",
-      "PRECOS": "7.190,6.058,7.230,7.357,",
+      "NVOTOS": 122,
+      "RANK": 4.4,
+      "PRECOS": "7.190,6.058,7.230,7.357",
       "RANKPRECOS": "2,2,2,2,2",
       "DATAATUALIZACAO": "1655242978676"
     },
     {
+      "ID": 10,
       "NOMEFANTASIA": "Posto campo belo",
       "ENDERECO": "R. Fonseca e Silva, 1088",
       "BAIRRO": "Alecrim",
@@ -134,13 +144,14 @@
       "MUNICIPIO": "Natal",
       "UF": "RN",
       "COORDENADAS": "-5.792921412841297, -35.21456539484271",
-      "NVOTOS": "58",
-      "RANK": "4.2",
-      "PRECOS": "7.190,6.058,7.230,7.357,",
+      "NVOTOS": 58,
+      "RANK": 4.2,
+      "PRECOS": "7.190,6.058,7.230,7.357",
       "RANKPRECOS": "2,2,2,2,2",
       "DATAATUALIZACAO": "1655242978676"
     },
     {
+      "ID": 11,
       "NOMEFANTASIA": "Posto Alecrim",
       "ENDERECO": "R. Pres. Sarmento, 426",
       "BAIRRO": "Alecrim",
@@ -148,13 +159,14 @@
       "MUNICIPIO": "Natal",
       "UF": "RN",
       "COORDENADAS": "-5.7967061396047725, -35.223131266050615",
-      "NVOTOS": "137",
-      "RANK": "4.3",
-      "PRECOS": "7.190,6.058,7.230,7.357,",
+      "NVOTOS": 137,
+      "RANK": 4.3,
+      "PRECOS": "7.190,6.058,7.230,7.357",
       "RANKPRECOS": "2,2,2,2,2",
       "DATAATUALIZACAO": "1655242978676"
     },
     {
+      "ID": 12,
       "NOMEFANTASIA": "Posto Petrobras Frei Damião",
       "ENDERECO": "Av. Capitão-Mor Gouveia, 1245",
       "BAIRRO": "Dix-Sept Rosado",
@@ -162,14 +174,44 @@
       "MUNICIPIO": "Natal",
       "UF": "RN",
       "COORDENADAS": "-5.82101601159894, -35.23333910100303",
-      "NVOTOS": "253",
-      "RANK": "4.1",
-      "PRECOS": "7.190,6.058,7.230,7.357,",
+      "NVOTOS": 253,
+      "RANK": 4.1,
+      "PRECOS": "7.190,6.058,7.230,7.357",
       "RANKPRECOS": "2,2,2,2,2",
       "DATAATUALIZACAO": "1655242978676"
     }
   ],
-  "postoRates": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+  "postoRates": [
+    {
+      "[id do posto,Nvotos[diesel,etanol,gasolina,gasolina aditivada],Valor quando votou[diesel,etanol,gasolina,gasolina aditivada] ]": "",
+      "positivo": [
+        [1, [2, 2, 2, 2], [7.19, 6.058, 7.23, 7.357]],
+        [2, [2, 2, 2, 2], [7.19, 6.058, 7.23, 7.357]],
+        [3, [2, 2, 2, 2], [7.19, 6.058, 7.23, 7.357]],
+        [4, [2, 2, 2, 2], [7.19, 6.058, 7.23, 7.357]],
+        [5, [2, 2, 2, 2], [7.19, 6.058, 7.23, 7.357]],
+        [6, [2, 2, 2, 2], [7.19, 6.058, 7.23, 7.357]],
+        [7, [2, 2, 2, 2], [7.19, 6.058, 7.23, 7.357]],
+        [8, [2, 2, 2, 2], [7.19, 6.058, 7.23, 7.357]],
+        [9, [2, 2, 2, 2], [7.19, 6.058, 7.23, 7.357]],
+        [10, [2, 2, 2, 2], [7.19, 6.058, 7.23, 7.357]],
+        [11, [2, 2, 2, 2], [7.19, 6.058, 7.23, 7.357]],
+        [12, [2, 2, 2, 2], [7.19, 6.058, 7.23, 7.357]]
+      ],
+      "negativo": ""
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
   "usuarios": [
     {
       "key": "1",

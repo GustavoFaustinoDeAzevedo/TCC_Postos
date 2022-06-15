@@ -14,7 +14,19 @@ import {
   ZoomInOutlined,
   ZoomOutOutlined,
 } from '@ant-design/icons';
-import { Button, Card, Drawer, Input, List, Popover, Rate, Spin } from 'antd';
+import {
+  Button,
+  Card,
+  Drawer,
+  Input,
+  List,
+  Popover,
+  Tooltip,
+  Rate,
+  Spin,
+  Modal,
+  InputNumber,
+} from 'antd';
 import {
   ActiveLoadting,
   GetCoord,
@@ -30,7 +42,6 @@ import {
   Marker,
   Popup,
   TileLayer,
-  Tooltip,
   useMap,
   useMapEvent,
   useMapEvents,
@@ -108,7 +119,8 @@ function MyComponent(props) {
     tabelaPrecos,
   } = useSelector((state) => state.general);
   const [localCoord, setLocalCoord] = useState({ lat: 0, lng: 0 });
-
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [price, setPrice] = useState(null);
   //const [localCoord,SetLocalCoord] = useEffect(position);
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -123,17 +135,18 @@ function MyComponent(props) {
       );
     });
   }, []);
+
+  const d = new Date();
   const mapRef = useRef(null);
+
   const handleClick = () => {
     mapRef.current._popup._closeButton.addEventListener('click', (event) => {
       event.preventDefault();
     });
   };
-
   function ChangeMapView() {
     const map = useMap();
     map.setView(coord, map.getZoom(), { animate: 'false' });
-
     return null;
   }
   const map = (
@@ -145,38 +158,42 @@ function MyComponent(props) {
           width: '100%',
         }}
       >
-        <Drawer
-          title="Resultado"
-          placement="top"
-          height={window.screen.width < 780 ? '60vh' : '80vh'}
-          getContainer={false}
-          style={{
-            position: 'absolute',
-          }}
-          onClose={() => {
-            props.dispatch(ShowMapDrawer(false));
-          }}
-          visible={mapDrawer}
-        >
-          <Tabela />
-        </Drawer>
-
         <MapContainer
           dragging={true}
           center={localCoord}
-          zoom={15}
+          zoom={14}
           zoomControl={false}
-          scrollWheelZoom={true}
+          scrollWheelZoom={false}
           style={{
             minHeight: window.screen.width < 780 ? '69vh' : '86vh',
             width: '100%',
           }}
           ref={mapRef}
         >
+          <Drawer
+            title="Resultado"
+            placement="top"
+            height={window.screen.width < 780 ? '60vh' : '80vh'}
+            getContainer={false}
+            style={{
+              position: 'absolute',
+            }}
+            onClose={() => {
+              props.dispatch(ActiveLoadting());
+              props.dispatch(ShowMapDrawer(false));
+            }}
+            visible={mapDrawer}
+          >
+            <>
+              <Tabela />
+            </>
+          </Drawer>
+          <ChangeMapView />
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
+
           {!mapDrawer && (
             <>
               <div style={{ height: '100%', width: '100%' }}>
@@ -214,13 +231,17 @@ function MyComponent(props) {
               />
             </>
           )}
+
           <List
             dataSource={Object.values(tabelaPrecos)}
             renderItem={(data) => (
               <List.Item style={{ paddingTop: '35px' }}>
                 <Marker
                   eventHandlers={{
-                    click: (e) => handleClick(),
+                    click: (e) => {
+                      props.dispatch(GetCoord(data.COORDENADAS.toString()));
+                      handleClick();
+                    },
                   }}
                   position={
                     data.COORDENADAS.toString()
@@ -228,186 +249,170 @@ function MyComponent(props) {
                       : [0, 0]
                   }
                 >
-                  <Popup>
-                    <Text strong>{data.NOMEFANTASIA}</Text> <br />{' '}
-                    {data.ENDERECO}
-                    <br /> {data.BAIRRO}
-                    <br />
-                    {data.RANK}
-                    <Rate
-                      disabled={!isAuthenticated}
-                      defaultValue={data.RANK}
-                    />
-                    ({data.NVOTOS})
-                    <br />
-                    <Card
-                      style={{
-                        backgroundColor: '#52c41a',
-                        color: 'white',
-                        borderRadius: '10px',
-                        lineHeight: '100%',
-                        fontSize: '0.75em',
-                      }}
-                    >
-                      <div>
+                  <div>
+                    <Popup>
+                      <Text strong>{data.NOMEFANTASIA}</Text> <br />{' '}
+                      {data.ENDERECO}
+                      <br /> {data.BAIRRO}
+                      <br />
+                      {data.RANK}
+                      <Rate
+                        disabled={!isAuthenticated}
+                        defaultValue={data.RANK}
+                      />
+                      ({data.NVOTOS})
+                      <br />
+                      <Text type="secondary">
+                        {console.log(
+                          ((d.getTime() - data.DATAATUALIZACAO) / 86400000) * 24
+                        )}
+                        Atualizado{' '}
+                        {'há ' +
+                          ((d.getTime() - data.DATAATUALIZACAO) / 3600000 < 24
+                            ? (
+                                (d.getTime() - data.DATAATUALIZACAO) /
+                                3600000
+                              ).toFixed(2) + ' horas'
+                            : (
+                                (d.getTime() - data.DATAATUALIZACAO) /
+                                86400000
+                              ).toFixed(0) +
+                              ' dias e ' +
+                              (
+                                ((
+                                  (d.getTime() - data.DATAATUALIZACAO) /
+                                  86400000
+                                ).toFixed(2) %
+                                  1) *
+                                24
+                              ).toFixed(2) +
+                              ' horas')}
+                      </Text>
+                      <Card
+                        style={{
+                          // backgroundColor: '#73d13d',
+                          color: 'black',
+                          borderRadius: '10px',
+                          borderColor: 'lightgray',
+                          lineHeight: '100%',
+                          fontSize: '0.75em',
+                        }}
+                      >
                         <div>
-                          <span>
-                            Diesel:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <div>
+                            <span>
+                              Diesel:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              {(6 + Math.random()).toFixed(3)}
+                              &nbsp;&nbsp;&nbsp;
+                              <Button
+                                type="ghost"
+                                disabled={!isAuthenticated}
+                                icon={<LikeOutlined />}
+                              />
+                              &nbsp;&nbsp;&nbsp;&nbsp;
+                              <Button
+                                type="ghost"
+                                disabled={!isAuthenticated}
+                                icon={<DislikeOutlined />}
+                                onClick={() => setIsModalVisible(true)}
+                              />
+                            </span>
+                          </div>
+                          <br />
+                          <div>
+                            Etanol:
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             {(6 + Math.random()).toFixed(3)}
                             &nbsp;&nbsp;&nbsp;
-                            <Rate
+                            <Button
+                              type="ghost"
                               disabled={!isAuthenticated}
-                              onChange={() => {
-                                if (isAuthenticated) {
-                                } else {
-                                  alert(
-                                    'Precisa autenticar para fazer esta ação!'
-                                  );
-                                }
-                              }}
-                              character={<LikeOutlined />}
-                              defaultValue={0}
-                              count={1}
+                              icon={<LikeOutlined />}
                             />
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <Rate
+                            <Button
+                              type="ghost"
                               disabled={!isAuthenticated}
-                              onChange={() => {
-                                if (isAuthenticated) {
-                                } else {
-                                  alert(
-                                    'Precisa autenticar para fazer esta ação!'
-                                  );
-                                }
-                              }}
-                              character={<DislikeOutlined />}
-                              defaultValue={0}
-                              count={1}
+                              icon={<DislikeOutlined />}
+                              onClick={() => setIsModalVisible(true)}
                             />
-                          </span>
+                          </div>
+                          <br />
+                          <div>
+                            Gasolina:
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            {(7 + Math.random()).toFixed(3)}
+                            &nbsp;&nbsp;&nbsp;
+                            <Button
+                              type="ghost"
+                              disabled={!isAuthenticated}
+                              icon={<LikeOutlined />}
+                            />
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <Button
+                              type="ghost"
+                              disabled={!isAuthenticated}
+                              icon={<DislikeOutlined />}
+                              onClick={() => setIsModalVisible(true)}
+                            />
+                          </div>
+                          <br />
+                          <div>
+                            G. Aditivada: &nbsp;&nbsp;&nbsp;&nbsp;
+                            {(7 + Math.random()).toFixed(3)}
+                            &nbsp;&nbsp;&nbsp;
+                            <Button
+                              type="ghost"
+                              disabled={!isAuthenticated}
+                              autoFocus={true}
+                              icon={<LikeOutlined />}
+                            />
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <Button
+                              type="ghost"
+                              disabled={!isAuthenticated}
+                              icon={<DislikeOutlined />}
+                              onClick={() => setIsModalVisible(true)}
+                            />
+                          </div>
                         </div>
-                        <br />
-                        <div>
-                          Etanol:
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          {(6 + Math.random()).toFixed(3)}
-                          &nbsp;&nbsp;&nbsp;
-                          <Rate
-                            disabled={!isAuthenticated}
-                            onChange={() => {
-                              if (isAuthenticated) {
-                              } else {
-                                alert(
-                                  'Precisa autenticar para fazer esta ação!'
-                                );
-                              }
-                            }}
-                            character={<LikeOutlined />}
-                            defaultValue={0}
-                            count={1}
-                          />
-                          &nbsp;&nbsp;&nbsp;&nbsp;
-                          <Rate
-                            disabled={!isAuthenticated}
-                            onChange={() => {
-                              if (isAuthenticated) {
-                              } else {
-                                alert(
-                                  'Precisa autenticar para fazer esta ação!'
-                                );
-                              }
-                            }}
-                            character={<DislikeOutlined />}
-                            defaultValue={0}
-                            count={1}
-                          />
-                        </div>
-                        <br />
-                        <div>
-                          Gasolina:
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          {(7 + Math.random()).toFixed(3)}
-                          &nbsp;&nbsp;&nbsp;
-                          <Rate
-                            disabled={!isAuthenticated}
-                            onChange={() => {
-                              if (isAuthenticated) {
-                              } else {
-                                alert(
-                                  'Precisa autenticar para fazer esta ação!'
-                                );
-                              }
-                            }}
-                            character={<LikeOutlined />}
-                            defaultValue={0}
-                            count={1}
-                          />
-                          &nbsp;&nbsp;&nbsp;&nbsp;
-                          <Rate
-                            disabled={!isAuthenticated}
-                            onChange={() => {
-                              if (isAuthenticated) {
-                              } else {
-                                alert(
-                                  'Precisa autenticar para fazer esta ação!'
-                                );
-                              }
-                            }}
-                            character={<DislikeOutlined />}
-                            defaultValue={0}
-                            count={1}
-                          />
-                        </div>
-                        <br />
-                        <div>
-                          G. Aditivada: &nbsp;&nbsp;&nbsp;&nbsp;
-                          {(7 + Math.random()).toFixed(3)}
-                          &nbsp;&nbsp;&nbsp;
-                          <Rate
-                            disabled={!isAuthenticated}
-                            onChange={() => {
-                              if (isAuthenticated) {
-                              } else {
-                                alert(
-                                  'Precisa autenticar para fazer esta ação!'
-                                );
-                              }
-                            }}
-                            character={<LikeOutlined />}
-                            defaultValue={0}
-                            count={1}
-                          />
-                          &nbsp;&nbsp;&nbsp;&nbsp;
-                          <Rate
-                            disabled={!isAuthenticated}
-                            onChange={() => {
-                              if (isAuthenticated) {
-                              } else {
-                                alert(
-                                  'Precisa autenticar para fazer esta ação!'
-                                );
-                              }
-                            }}
-                            character={<DislikeOutlined />}
-                            defaultValue={0}
-                            count={1}
-                          />
-                        </div>
-                      </div>
-                    </Card>
-                  </Popup>
-                  <Tooltip direction="auto" offset={[-8, -2]} opacity={3}>
-                    <span>{data.NOMEFANTASIA}</span>
-                  </Tooltip>
+                      </Card>
+                      <br />
+                      {!isAuthenticated && (
+                        <Text type="success">
+                          Faça login para poder interagir
+                        </Text>
+                      )}
+                    </Popup>
+                  </div>
                 </Marker>
               </List.Item>
             )}
           />
-          <ChangeMapView />
         </MapContainer>
+        <Modal
+          title="Por favor, insira o valor correto do preço"
+          onCancel={() => setIsModalVisible(false)}
+          visible={isModalVisible}
+        >
+          <InputNumber
+            style={{
+              width: 200,
+            }}
+            defaultValue={price}
+            min="0"
+            max="100"
+            step="0.001"
+            stringMode
+          />
+        </Modal>
       </div>
     </Spin>
   );
-  return <div>{map}</div>;
+  return (
+    <div>
+      <div>{map}</div>
+    </div>
+  );
 }
 export default connect()(MyComponent);

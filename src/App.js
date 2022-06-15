@@ -8,7 +8,6 @@ import './App.css';
 function App() {
   return (
     <Provider store={store}>
-      {localStorage.clear()}
       <ErrorBoundary>
         <Main />
       </ErrorBoundary>

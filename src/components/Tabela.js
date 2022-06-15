@@ -1,8 +1,4 @@
-//logar como:
-//gustavo@hotmail.com
-//123456
-//para editar tabela
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Avatar,
   BackTop,
@@ -54,29 +50,7 @@ function Tabela(props) {
   const [tempData, setTempData] = useState([]);
   const [data, setData] = useState([]);
   const [visible, setVisible] = useState(false);
-  const SearchInTable = (setSelectedKeys, selectedKeys, confirm) => {
-    return (
-      <>
-        <Input
-          autoFocus
-          placeholder="Texto para pesquisa"
-          allowClear
-          value={selectedKeys}
-          onChange={(e) => {
-            setSelectedKeys(e.target.value ? [e.target.value] : []);
-            confirm({ closeDropdown: false });
-          }}
-          onPressEnter={() => {
-            confirm();
-          }}
-          onBlur={() => {
-            confirm();
-          }}
-          style={{ width: 200 }}
-        />
-      </>
-    );
-  };
+
   useEffect(() => {
     props.dispatch(ActiveLoadting());
   }, []);
@@ -99,14 +73,14 @@ function Tabela(props) {
             pageSizeOptions: ['10', '20', '40', '80'],
             position: 'both',
           }}
-          dataSource={tabelaPrecosPesquisa}
+          dataSource={Object.values(tabelaPrecosPesquisa)}
           renderItem={(data) => (
             <List.Item style={{ paddingTop: '35px' }}>
               <Card
                 hoverable={true}
                 bordered={false}
-                title={data[0]}
-                key={data[0]}
+                title={data.NOMEFANTASIA}
+                key={data.NOMEFANTASIA}
                 //actions={[
                 // {
                 /*
@@ -136,7 +110,7 @@ function Tabela(props) {
                 <div style={{ paddingBottom: '10px' }}>
                   <Button
                     onClick={() => {
-                      props.dispatch(GetCoord(data[6]));
+                      props.dispatch(GetCoord(data.COORDENADAS.toString()));
                       props.dispatch(ShowMapDrawer(false));
                     }}
                   >
@@ -152,16 +126,10 @@ function Tabela(props) {
                   }}
                 >
                   <Text type="secondary">
-                    {data[1]} - {data[2]}, {data[4]} - {data[5]}
+                    {data.ENDERECO} - {data.BAIRRO}, {data.MUNICIPIO} -{' '}
+                    {data.UF}
                   </Text>
                   <br />
-                  <Text type="secondary">
-                    Distância: {' ' + Math.floor(Math.random() * 100)}km
-                  </Text>
-                  <br />
-                  <Text type="secondary">
-                    Atualizado: {'há ' + Math.floor(Math.random() * 96)}h
-                  </Text>
                 </Card>
 
                 <Card
@@ -173,22 +141,22 @@ function Tabela(props) {
                     width: '100%',
                   }}
                 >
+                  &nbsp;
                   <Avatar
                     src={process.env.PUBLIC_URL + '/rating-2797.png'}
                     shape="square"
                     size={window.screen.width > 780 ? 'large' : 'small'}
                   />
-
+                  &nbsp;
+                  <Text type="secondary">{data.RANK}</Text>
                   <Rate
                     disabled={!isAuthenticated}
-                    defaultValue={1 + Math.random() * 4}
+                    defaultValue={data.RANK}
                     style={{
                       paddingLeft: window.screen.width < 780 ? '10px' : '20px',
                     }}
                   />
-                  <Text type="secondary">
-                    ({Math.floor(Math.random() * 1000)})
-                  </Text>
+                  <Text type="secondary">&nbsp;({data.NVOTOS})</Text>
                 </Card>
                 {/*
                 <Collapse bordered={false} ghost defaultActiveKey={['1']}>

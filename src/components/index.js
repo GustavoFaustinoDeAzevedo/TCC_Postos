@@ -30,7 +30,7 @@ import MyComponent from '../components/GoogleMapsAPI.js';
 import Location from '../components/UserLocation';
 import Tabela from './Tabela';
 import { usePapaParse } from 'react-papaparse';
-
+import { useMap } from 'react-leaflet';
 const Home = (props) => {
   const { tabelaPrecos } = useSelector((state) => state.general);
   const [visible, setVisible] = useState(false);
@@ -38,6 +38,7 @@ const Home = (props) => {
     (state) => state.general
   );
   const { Search } = Input;
+
   const breadcrumbNameMap = {
     '/perfil': 'Perfil',
     '/registrar': 'Registro',

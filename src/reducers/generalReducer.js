@@ -140,7 +140,10 @@ const generalReducer = function (state = initialState, action) {
         tabelaPrecosPesquisa: action.payload
           ? state.tabelaPrecos.filter((x) => {
               let data = action.payload.split(' ');
-              return data.every((y) => String(x).toLowerCase().includes(y));
+              console.log(Object.values(x));
+              return data.every((y) =>
+                String(Object.values(x)).toLowerCase().includes(y)
+              );
             })
           : state.tabelaPrecos,
       };
