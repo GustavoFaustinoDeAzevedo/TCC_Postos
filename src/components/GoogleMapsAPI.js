@@ -7,6 +7,7 @@ import React, { useEffect, useState, useCallback, memo, useRef } from 'react';
 } from '@react-google-maps/api';*/
 import { connect, useSelector } from 'react-redux';
 import {
+  DislikeOutlined,
   HomeOutlined,
   LikeOutlined,
   SendOutlined,
@@ -38,6 +39,7 @@ import {
 import './Maps.css';
 import Tabela from './Tabela';
 import Search from 'antd/lib/input/Search';
+import Text from 'antd/lib/typography/Text';
 /*function MyComponent(props) {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -213,24 +215,30 @@ function MyComponent(props) {
             </>
           )}
           <List
-            dataSource={tabelaPrecos}
+            dataSource={Object.values(tabelaPrecos)}
             renderItem={(data) => (
               <List.Item style={{ paddingTop: '35px' }}>
-                {console.log(data)}
                 <Marker
                   eventHandlers={{
                     click: (e) => handleClick(),
                   }}
-                  position={data.COORDENADAS}
+                  position={
+                    data.COORDENADAS.toString()
+                      ? data.COORDENADAS.toString().split(',')
+                      : [0, 0]
+                  }
                 >
                   <Popup>
-                    {data[0]} <br /> {data[1]}
-                    <br /> {data[2]}
+                    <Text strong>{data.NOMEFANTASIA}</Text> <br />{' '}
+                    {data.ENDERECO}
+                    <br /> {data.BAIRRO}
                     <br />
+                    {data.RANK}
                     <Rate
                       disabled={!isAuthenticated}
-                      defaultValue={1 + Math.random() * 4}
+                      defaultValue={data.RANK}
                     />
+                    ({data.NVOTOS})
                     <br />
                     <Card
                       style={{
@@ -261,6 +269,21 @@ function MyComponent(props) {
                               defaultValue={0}
                               count={1}
                             />
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <Rate
+                              disabled={!isAuthenticated}
+                              onChange={() => {
+                                if (isAuthenticated) {
+                                } else {
+                                  alert(
+                                    'Precisa autenticar para fazer esta ação!'
+                                  );
+                                }
+                              }}
+                              character={<DislikeOutlined />}
+                              defaultValue={0}
+                              count={1}
+                            />
                           </span>
                         </div>
                         <br />
@@ -280,6 +303,21 @@ function MyComponent(props) {
                               }
                             }}
                             character={<LikeOutlined />}
+                            defaultValue={0}
+                            count={1}
+                          />
+                          &nbsp;&nbsp;&nbsp;&nbsp;
+                          <Rate
+                            disabled={!isAuthenticated}
+                            onChange={() => {
+                              if (isAuthenticated) {
+                              } else {
+                                alert(
+                                  'Precisa autenticar para fazer esta ação!'
+                                );
+                              }
+                            }}
+                            character={<DislikeOutlined />}
                             defaultValue={0}
                             count={1}
                           />
@@ -304,6 +342,21 @@ function MyComponent(props) {
                             defaultValue={0}
                             count={1}
                           />
+                          &nbsp;&nbsp;&nbsp;&nbsp;
+                          <Rate
+                            disabled={!isAuthenticated}
+                            onChange={() => {
+                              if (isAuthenticated) {
+                              } else {
+                                alert(
+                                  'Precisa autenticar para fazer esta ação!'
+                                );
+                              }
+                            }}
+                            character={<DislikeOutlined />}
+                            defaultValue={0}
+                            count={1}
+                          />
                         </div>
                         <br />
                         <div>
@@ -324,34 +377,27 @@ function MyComponent(props) {
                             defaultValue={0}
                             count={1}
                           />
+                          &nbsp;&nbsp;&nbsp;&nbsp;
+                          <Rate
+                            disabled={!isAuthenticated}
+                            onChange={() => {
+                              if (isAuthenticated) {
+                              } else {
+                                alert(
+                                  'Precisa autenticar para fazer esta ação!'
+                                );
+                              }
+                            }}
+                            character={<DislikeOutlined />}
+                            defaultValue={0}
+                            count={1}
+                          />
                         </div>
-                        <br />
-                        <span>
-                          <div>
-                            G. A. Premium:&nbsp;
-                            {(7 + Math.random()).toFixed(3)}
-                            &nbsp;&nbsp;&nbsp;
-                            <Rate
-                              disabled={!isAuthenticated}
-                              onChange={() => {
-                                if (isAuthenticated) {
-                                } else {
-                                  alert(
-                                    'Precisa autenticar para fazer esta ação!'
-                                  );
-                                }
-                              }}
-                              character={<LikeOutlined />}
-                              defaultValue={0}
-                              count={1}
-                            />
-                          </div>
-                        </span>
                       </div>
                     </Card>
                   </Popup>
                   <Tooltip direction="auto" offset={[-8, -2]} opacity={3}>
-                    <span>{data[0]}</span>
+                    <span>{data.NOMEFANTASIA}</span>
                   </Tooltip>
                 </Marker>
               </List.Item>

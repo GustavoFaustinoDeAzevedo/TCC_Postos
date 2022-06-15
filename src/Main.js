@@ -46,7 +46,7 @@ import Home from './components';
 function Main(props) {
   const { readRemoteFile } = usePapaParse();
   const { Header, Content, Footer, Sider } = Layout;
-  const { isAuthenticated, loading } = useSelector((state) => state.general);
+  const { isAuthenticated, loadingMap } = useSelector((state) => state.general);
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem('usuario'));
 
@@ -74,7 +74,7 @@ function Main(props) {
         <Home />
 
         <Content>
-          <Spin style={{ overflow: 'hidden' }} spinning={loading}>
+          <Spin style={{ overflow: 'hidden' }} spinning={loadingMap}>
             <div
               style={{
                 backgroundColor: 'rgba(255,255,255,1)',
