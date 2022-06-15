@@ -184,6 +184,7 @@
   "postoRates": [
     {
       "[id do posto,Nvotos[diesel,etanol,gasolina,gasolina aditivada],Valor quando votou[diesel,etanol,gasolina,gasolina aditivada] ]": "",
+      "ID": 1,
       "positivo": [
         [1, [2, 2, 2, 2], [7.19, 6.058, 7.23, 7.357]],
         [2, [2, 2, 2, 2], [7.19, 6.058, 7.23, 7.357]],
@@ -200,17 +201,17 @@
       ],
       "negativo": ""
     },
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {}
+    { "ID": 2 },
+    { "ID": 3 },
+    { "ID": 4 },
+    { "ID": 5 },
+    { "ID": 6 },
+    { "ID": 7 },
+    { "ID": 8 },
+    { "ID": 9 },
+    { "ID": 10 },
+    { "ID": 11 },
+    { "ID": 12 }
   ],
   "usuarios": [
     {

@@ -95,7 +95,6 @@ const generalReducer = function (state = initialState, action) {
       state = {
         ...state,
         loadingMap: false,
-        headPrecos: action.payload.data.shift(),
         tabelaPrecos: action.payload.data,
         tabelaPrecosPesquisa: action.payload.data,
       };
