@@ -601,30 +601,4 @@
       "DATAATUALIZACAO": "1655242978676"
     }
   ],
-  "usuarios": [
-    {
-      "key": "1",
-      "nome": "Gustavo",
-      "telefone": "(84) 55555-5555",
-      "email": "gustavo@hotmail.com",
-      "senha": "123456",
-      "dba": "true"
-    },
-    {
-      "key": "2",
-      "nome": "Jairo",
-      "telefone": "(84) 55555-5555",
-      "email": "jairo@hotmail.com",
-      "senha": "123456",
-      "dba": "false"
-    },
-    {
-      "key": "3",
-      "nome": "Dmytres",
-      "telefone": "(84) 55555-5555",
-      "email": "dmytres@hotmail.com",
-      "senha": "123456",
-      "dba": "false"
-    }
-  ]
-}
+  
