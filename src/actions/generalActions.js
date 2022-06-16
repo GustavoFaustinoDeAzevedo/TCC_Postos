@@ -92,7 +92,7 @@ export const PrecoCombustivel = function (data) {
     dispatch({
       type: 'GET_CSV',
       payload: axios.get(
-        'https://my-json-server.typicode.com/Gustavo195/TCC_Postos/postos?_embed=Rates'
+        'https://my-json-server.typicode.com/Gustavo195/TCC_Postos/postos'
       ),
     });
   };
