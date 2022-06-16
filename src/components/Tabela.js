@@ -73,7 +73,7 @@ function Tabela(props) {
             pageSizeOptions: ['10', '20', '40', '80'],
             position: 'both',
           }}
-          dataSource={Object.values(tabelaPrecosPesquisa)}
+          dataSource={tabelaPrecosPesquisa}
           renderItem={(data) => (
             <List.Item style={{ paddingTop: '35px' }}>
               <Card
@@ -110,7 +110,7 @@ function Tabela(props) {
                 <div style={{ paddingBottom: '10px' }}>
                   <Button
                     onClick={() => {
-                      props.dispatch(GetCoord(data.COORDENADAS.toString()));
+                      props.dispatch(GetCoord(data.COORDENADAS));
                       props.dispatch(ShowMapDrawer(false));
                     }}
                   >

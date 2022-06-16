@@ -1,7 +1,7 @@
 import { message } from 'antd';
 var initialState = {
-  loading: true,
-  loadingMap: true,
+  loading: false,
+  loadingMap: false,
   isAuthenticated: false,
   mobile: false,
   mapDrawer: false,
@@ -14,7 +14,609 @@ var initialState = {
   newPost: '',
   coord: [0, 0],
   headPrecos: [],
-  tabelaPrecos: [{ COORDENADAS: [0, 0] }],
+  tabelaPrecos: [
+    {
+      ID: 1,
+      NOMEFANTASIA: 'Posto Premier',
+      ENDERECO: 'Av. Sen. Salgado Filho, 1552',
+      BAIRRO: 'Tirol',
+      CEP: '59022-000',
+      MUNICIPIO: 'Natal',
+      UF: 'RN',
+      COORDENADAS: '-5.81064508080955, -35.20450492805552',
+      NVOTOS: 68,
+      RANK: 4,
+      PRECOS: [
+        {
+          Diesel: [
+            {
+              Atual: 6.88,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Etanol: [
+            {
+              Atual: 6.058,
+              VotosNegativos: [],
+              votosp: '[id1,id2,id3,id4...]',
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Gasolina: [
+            {
+              Atual: 5,
+              votosnegativ: '[[id1, preço],[id2, preço],[id3, preço],...]',
+              VotosNegativos: [
+                [2, 7.23],
+                [3, 7.23],
+              ],
+              VotosPositivos: [],
+            },
+          ],
+          Aditivada: [
+            {
+              Atual: 7.357,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+        },
+      ],
+      DATAATUALIZACAO: '1655242978676',
+    },
+    {
+      ID: 2,
+      NOMEFANTASIA: 'Posto Cidade Natal',
+      ENDERECO: 'Av. Sen. Salgado Filho, 2102',
+      BAIRRO: 'Lagoa Nova',
+      CEP: '59056-000',
+      MUNICIPIO: 'Natal',
+      UF: 'RN',
+      COORDENADAS: '-5.815061323507136, -35.206155926941804',
+      NVOTOS: 287,
+      RANK: 4.3,
+      PRECOS: [
+        {
+          Diesel: [
+            {
+              Atual: 6.88,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Etanol: [
+            {
+              Atual: 6.058,
+              VotosNegativos: [],
+              votosp: '[id1,id2,id3,id4...]',
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Gasolina: [
+            {
+              Atual: 5,
+              votosnegativ: '[[id1, preço],[id2, preço],[id3, preço],...]',
+              VotosNegativos: [
+                [2, 7.23],
+                [3, 7.23],
+              ],
+              VotosPositivos: [],
+            },
+          ],
+          Aditivada: [
+            {
+              Atual: 7.357,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+        },
+      ],
+      DATAATUALIZACAO: '1655242978676',
+    },
+    {
+      ID: 3,
+      NOMEFANTASIA: 'Posto Monte Belo - Romualdo',
+      ENDERECO: 'Av. Romualdo Galvão, 1954',
+      BAIRRO: 'Lagoa Nova',
+      CEP: '59056-105',
+      MUNICIPIO: 'Natal',
+      UF: 'RN',
+      COORDENADAS: '-5.811927723146007, -35.208301553553106',
+      NVOTOS: 1,
+      RANK: 5,
+      PRECOS: [
+        {
+          Diesel: [
+            {
+              Atual: 6.88,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Etanol: [
+            {
+              Atual: 6.058,
+              VotosNegativos: [],
+              votosp: '[id1,id2,id3,id4...]',
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Gasolina: [
+            {
+              Atual: 5,
+              votosnegativ: '[[id1, preço],[id2, preço],[id3, preço],...]',
+              VotosNegativos: [
+                [2, 7.23],
+                [3, 7.23],
+              ],
+              VotosPositivos: [],
+            },
+          ],
+          Aditivada: [
+            {
+              Atual: 7.357,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+        },
+      ],
+      DATAATUALIZACAO: '1655242978676',
+    },
+    {
+      ID: 4,
+      NOMEFANTASIA: 'Posto Amigo - Salgado Filho',
+      ENDERECO: 'Av. Sen. Salgado Filho, 2840',
+      BAIRRO: 'Lagoa Nova',
+      CEP: '59076-000',
+      MUNICIPIO: 'Natal',
+      UF: 'RN',
+      COORDENADAS: '-5.823616768173716, -35.20891700902441',
+      NVOTOS: 52,
+      RANK: 4.4,
+      PRECOS: [
+        {
+          Diesel: [
+            {
+              Atual: 6.88,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Etanol: [
+            {
+              Atual: 6.058,
+              VotosNegativos: [],
+              votosp: '[id1,id2,id3,id4...]',
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Gasolina: [
+            {
+              Atual: 5,
+              votosnegativ: '[[id1, preço],[id2, preço],[id3, preço],...]',
+              VotosNegativos: [
+                [2, 7.23],
+                [3, 7.23],
+              ],
+              VotosPositivos: [],
+            },
+          ],
+          Aditivada: [
+            {
+              Atual: 7.357,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+        },
+      ],
+      DATAATUALIZACAO: '1655242978676',
+    },
+    {
+      ID: 5,
+      NOMEFANTASIA: 'Postos dos Anjos',
+      ENDERECO: 'Av. dos Xavantes, 2001',
+      BAIRRO: 'Pitimbú',
+      CEP: '59067-600',
+      MUNICIPIO: 'Natal',
+      UF: 'RN',
+      COORDENADAS: '-5.86589084965274, -35.22617744294625',
+      NVOTOS: 5,
+      RANK: 3.6,
+      PRECOS: [
+        {
+          Diesel: [
+            {
+              Atual: 6.88,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Etanol: [
+            {
+              Atual: 6.058,
+              VotosNegativos: [],
+              votosp: '[id1,id2,id3,id4...]',
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Gasolina: [
+            {
+              Atual: 5,
+              votosnegativ: '[[id1, preço],[id2, preço],[id3, preço],...]',
+              VotosNegativos: [
+                [2, 7.23],
+                [3, 7.23],
+              ],
+              VotosPositivos: [],
+            },
+          ],
+          Aditivada: [
+            {
+              Atual: 7.357,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+        },
+      ],
+      DATAATUALIZACAO: '1655242978676',
+    },
+    {
+      ID: 6,
+      NOMEFANTASIA: 'Zumba Petróleo',
+      ENDERECO: 'Av. Dr. João Medeiros Filho, 975',
+      BAIRRO: 'Igapó',
+      CEP: '59104-200',
+      MUNICIPIO: 'Natal',
+      UF: 'RN',
+      COORDENADAS: '-5.76260409332525, -35.25214100947361',
+      NVOTOS: 94,
+      RANK: 4.1,
+      PRECOS: [
+        {
+          Diesel: [
+            {
+              Atual: 6.88,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Etanol: [
+            {
+              Atual: 6.058,
+              VotosNegativos: [],
+              votosp: '[id1,id2,id3,id4...]',
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Gasolina: [
+            {
+              Atual: 5,
+              votosnegativ: '[[id1, preço],[id2, preço],[id3, preço],...]',
+              VotosNegativos: [
+                [2, 7.23],
+                [3, 7.23],
+              ],
+              VotosPositivos: [],
+            },
+          ],
+          Aditivada: [
+            {
+              Atual: 7.357,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+        },
+      ],
+      DATAATUALIZACAO: '1655242978676',
+    },
+    {
+      ID: 7,
+      NOMEFANTASIA: 'Posto Carrefour Posto Natal Zona Norte',
+      ENDERECO: 'Av. Dr. João Medeiros Filho, 2005',
+      BAIRRO: 'Potengi',
+      CEP: '59108-200',
+      MUNICIPIO: 'Natal',
+      UF: 'RN',
+      COORDENADAS: '-5.75945233907403, -35.247539269429545',
+      NVOTOS: 1874,
+      RANK: 4.2,
+      PRECOS: [
+        {
+          Diesel: [
+            {
+              Atual: 6.88,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Etanol: [
+            {
+              Atual: 6.058,
+              VotosNegativos: [],
+              votosp: '[id1,id2,id3,id4...]',
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Gasolina: [
+            {
+              Atual: 5,
+              votosnegativ: '[[id1, preço],[id2, preço],[id3, preço],...]',
+              VotosNegativos: [
+                [2, 7.23],
+                [3, 7.23],
+              ],
+              VotosPositivos: [],
+            },
+          ],
+          Aditivada: [
+            {
+              Atual: 7.357,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+        },
+      ],
+      DATAATUALIZACAO: '1655242978676',
+    },
+    {
+      ID: 8,
+      NOMEFANTASIA: 'Auto Posto Esmeraldo-24 Horas',
+      ENDERECO: 'Av. Engenheiro Roberto Freire, 1608',
+      BAIRRO: 'Capim Macio',
+      CEP: '59082-400',
+      MUNICIPIO: 'Natal',
+      UF: 'RN',
+      COORDENADAS: '-5.862799971218557, -35.190016715342075',
+      NVOTOS: 44,
+      RANK: 4.4,
+      PRECOS: [
+        {
+          Diesel: [
+            {
+              Atual: 6.88,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Etanol: [
+            {
+              Atual: 6.058,
+              VotosNegativos: [],
+              votosp: '[id1,id2,id3,id4...]',
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Gasolina: [
+            {
+              Atual: 5,
+              votosnegativ: '[[id1, preço],[id2, preço],[id3, preço],...]',
+              VotosNegativos: [
+                [2, 7.23],
+                [3, 7.23],
+              ],
+              VotosPositivos: [],
+            },
+          ],
+          Aditivada: [
+            {
+              Atual: 7.357,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+        },
+      ],
+      DATAATUALIZACAO: '1655242978676',
+    },
+    {
+      ID: 9,
+      NOMEFANTASIA: 'Cirne Postos - Petrópolis',
+      ENDERECO: 'R. Gen. Gustavo Cordeiro de Faria, 383',
+      BAIRRO: 'Petrópolis',
+      CEP: '59056-200',
+      MUNICIPIO: 'Natal',
+      UF: 'RN',
+      COORDENADAS: '-5.78050355417864, -35.19869901564033',
+      NVOTOS: 122,
+      RANK: 4.4,
+      PRECOS: [
+        {
+          Diesel: [
+            {
+              Atual: 6.88,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Etanol: [
+            {
+              Atual: 6.058,
+              VotosNegativos: [],
+              votosp: '[id1,id2,id3,id4...]',
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Gasolina: [
+            {
+              Atual: 5,
+              votosnegativ: '[[id1, preço],[id2, preço],[id3, preço],...]',
+              VotosNegativos: [
+                [2, 7.23],
+                [3, 7.23],
+              ],
+              VotosPositivos: [],
+            },
+          ],
+          Aditivada: [
+            {
+              Atual: 7.357,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+        },
+      ],
+      DATAATUALIZACAO: '1655242978676',
+    },
+    {
+      ID: 10,
+      NOMEFANTASIA: 'Posto campo belo',
+      ENDERECO: 'R. Fonseca e Silva, 1088',
+      BAIRRO: 'Alecrim',
+      CEP: '59030-270',
+      MUNICIPIO: 'Natal',
+      UF: 'RN',
+      COORDENADAS: '-5.792921412841297, -35.21456539484271',
+      NVOTOS: 58,
+      RANK: 4.2,
+      PRECOS: [
+        {
+          Diesel: [
+            {
+              Atual: 6.88,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Etanol: [
+            {
+              Atual: 6.058,
+              VotosNegativos: [],
+              votosp: '[id1,id2,id3,id4...]',
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Gasolina: [
+            {
+              Atual: 5,
+              votosnegativ: '[[id1, preço],[id2, preço],[id3, preço],...]',
+              VotosNegativos: [
+                [2, 7.23],
+                [3, 7.23],
+              ],
+              VotosPositivos: [],
+            },
+          ],
+          Aditivada: [
+            {
+              Atual: 7.357,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+        },
+      ],
+      DATAATUALIZACAO: '1655242978676',
+    },
+    {
+      ID: 11,
+      NOMEFANTASIA: 'Posto Alecrim',
+      ENDERECO: 'R. Pres. Sarmento, 426',
+      BAIRRO: 'Alecrim',
+      CEP: '59032-400',
+      MUNICIPIO: 'Natal',
+      UF: 'RN',
+      COORDENADAS: '-5.7967061396047725, -35.223131266050615',
+      NVOTOS: 137,
+      RANK: 4.3,
+      PRECOS: [
+        {
+          Diesel: [
+            {
+              Atual: 6.88,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Etanol: [
+            {
+              Atual: 6.058,
+              VotosNegativos: [],
+              votosp: '[id1,id2,id3,id4...]',
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Gasolina: [
+            {
+              Atual: 5,
+              votosnegativ: '[[id1, preço],[id2, preço],[id3, preço],...]',
+              VotosNegativos: [
+                [2, 7.23],
+                [3, 7.23],
+              ],
+              VotosPositivos: [],
+            },
+          ],
+          Aditivada: [
+            {
+              Atual: 7.357,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+        },
+      ],
+      DATAATUALIZACAO: '1655242978676',
+    },
+    {
+      ID: 12,
+      NOMEFANTASIA: 'Posto Petrobras Frei Damião',
+      ENDERECO: 'Av. Capitão-Mor Gouveia, 1245',
+      BAIRRO: 'Dix-Sept Rosado',
+      CEP: '59060-400',
+      MUNICIPIO: 'Natal',
+      UF: 'RN',
+      COORDENADAS: '-5.82101601159894, -35.23333910100303',
+      NVOTOS: 253,
+      RANK: 4.1,
+      PRECOS: [
+        {
+          Diesel: [
+            {
+              Atual: 6.88,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Etanol: [
+            {
+              Atual: 6.058,
+              VotosNegativos: [],
+              votosp: '[id1,id2,id3,id4...]',
+              VotosPositivos: [2, 3],
+            },
+          ],
+          Gasolina: [
+            {
+              Atual: 5,
+              votosnegativ: '[[id1, preço],[id2, preço],[id3, preço],...]',
+              VotosNegativos: [
+                [2, 7.23],
+                [3, 7.23],
+              ],
+              VotosPositivos: [],
+            },
+          ],
+          Aditivada: [
+            {
+              Atual: 7.357,
+              VotosNegativos: [],
+              VotosPositivos: [2, 3],
+            },
+          ],
+        },
+      ],
+      DATAATUALIZACAO: '1655242978676',
+    },
+  ],
+
   tabelaPrecosPesquisa: [],
   mapHeight: '0px',
 

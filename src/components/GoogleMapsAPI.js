@@ -233,18 +233,18 @@ function MyComponent(props) {
           )}
 
           <List
-            dataSource={Object.values(tabelaPrecos)}
+            dataSource={tabelaPrecos}
             renderItem={(data) => (
               <List.Item style={{ paddingTop: '35px' }}>
                 <Marker
                   eventHandlers={{
                     click: (e) => {
-                      props.dispatch(GetCoord(data.COORDENADAS.toString()));
+                      props.dispatch(GetCoord(data.COORDENADAS));
                       handleClick();
                     },
                   }}
                   position={
-                    data.COORDENADAS.toString()
+                    data.COORDENADAS
                       ? data.COORDENADAS.toString().split(',')
                       : [0, 0]
                   }

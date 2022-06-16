@@ -59,14 +59,7 @@ function Main(props) {
       props.dispatch(LogOut());
     }
   }, []);
-  useEffect(() => {
-    readRemoteFile(
-      process.env.PUBLIC_URL + '/cadastro_revendas_glp-1-corrigido-2.csv',
-      {
-        complete: (results) => {},
-      }
-    );
-  }, []);
+
   return (
     <HashRouter hashtype="noslash">
       {/*basename={process.env.PUBLIC_URL + '/'}>*/}

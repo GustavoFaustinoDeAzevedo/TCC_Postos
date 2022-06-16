@@ -48,9 +48,6 @@ const Home = (props) => {
     '/mapa': 'Mapa',
   };
   Location();
-  useEffect(() => {
-    props.dispatch(PrecoCombustivel());
-  }, []);
   const location = useLocation();
   const pathSnippets = location.pathname.split('/').filter((i) => i);
   const extraBreadcrumbItems = pathSnippets.map((_, index) => {
