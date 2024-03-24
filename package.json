@@ -13,7 +13,7 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^4.18.6",
     "antd-mask-input": "^0.1.15",
-    "axios": "^0.26.0",
+    "axios": "^0.28.0",
     "cep-promise": "^4.1.2",
     "coordenadas-do-cep": "^1.2.0",
     "leaflet": "^1.8.0",
